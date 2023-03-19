@@ -7,13 +7,17 @@
     <string name="sign_in">SIGN IN</string>
     <string name="create_new_account">Create New Account</string>
     <string name="update_profile_label">Update profile</string>
+    <string name="change_password_label">Change Password</string>
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
     <string name="phone">Phone</string>
     <string name="username">Username</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">SIGN UP</string>
-    <string name="update_profile">UPDATE</string>
+    <string name="update_profile">UPDATE PROFILE</string>
     <string name="change_password">CHANGE PASSWORD</string>
+    <string name="back">BACK</string>
     <string name="sign_in_lower">Sign In</string>
 </resources>
