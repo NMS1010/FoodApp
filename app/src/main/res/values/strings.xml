@@ -20,4 +20,9 @@
     <string name="change_password">CHANGE PASSWORD</string>
     <string name="back">BACK</string>
     <string name="sign_in_lower">Sign In</string>
+    <string name="not_processed">Chờ xử lý</string>
+    <string name="processing">Chờ lấy hàng</string>
+    <string name="shipped">Đang giao</string>
+    <string name="delivered">Đã giao</string>
+    <string name="cancelled">Đã hủy</string>
 </resources>
