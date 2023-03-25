@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface CategoryService {
+public interface ICategoryService {
     @GET("/appfoods/categories.php")
     Call<ArrayList<Category>> getAllCategories();
 }
