@@ -25,4 +25,9 @@
     <string name="shipped">Đang giao</string>
     <string name="delivered">Đã giao</string>
     <string name="cancelled">Đã hủy</string>
+    <string name="home">Home</string>
+    <string name="order">Đơn hàng</string>
+    <string name="user">Profile</string>
+    <string name="setting">Cài đặt</string>
+
 </resources>

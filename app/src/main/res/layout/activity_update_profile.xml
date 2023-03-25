@@ -50,7 +50,7 @@
         </FrameLayout>
 
         <EditText
-            android:id="@+id/inputFirstName_profile"
+            android:id="@+id/inputSearch_home"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
