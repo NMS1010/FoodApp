@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityProfileBinding;
 
-public class ProfileActivity extends AppCompatActivity {
+public class Profile extends AppCompatActivity {
     ActivityProfileBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +23,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setEvents(){
         binding.btnChangePasswordProfile.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), ChangePasswordActivity.class));
+            startActivity(new Intent(getApplicationContext(), ChangePassword.class));
         });
         binding.btnUpdateProfile.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), UpdateProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), UpdateProfile.class));
         });
     }
 }

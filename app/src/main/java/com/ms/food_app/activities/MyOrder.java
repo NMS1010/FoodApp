@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.ms.food_app.databinding.ActivityMyOrderBinding;
 
-public class MyOrderActivity extends AppCompatActivity {
+public class MyOrder extends AppCompatActivity {
 
     private ActivityMyOrderBinding binding;
 

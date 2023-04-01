@@ -7,10 +7,9 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityChangePasswordBinding;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ChangePassword extends AppCompatActivity {
     ActivityChangePasswordBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     }
     private void setEvents(){
         binding.btnBackChangePassword.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), Profile.class));
         });
     }
 }

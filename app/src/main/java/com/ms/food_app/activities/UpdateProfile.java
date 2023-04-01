@@ -14,14 +14,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityUpdateProfileBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class UpdateProfileActivity extends AppCompatActivity {
+public class UpdateProfile extends AppCompatActivity {
 
     ActivityUpdateProfileBinding binding;
     private String encodeImage;
@@ -37,7 +36,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     }
     private void setEvents(){
         binding.btnBackUpdateProfile.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), Profile.class));
         });
     }
     private String encodeImage(Bitmap bitmap) {

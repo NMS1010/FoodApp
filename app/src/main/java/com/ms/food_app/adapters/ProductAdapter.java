@@ -28,15 +28,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View productItem = LayoutInflater.from(context).inflate(R.layout.recycler_view_product_item, parent, false);
+        View productItem = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false);
         return new ProductViewHolder(productItem);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        Glide.with(context).load(product.getStrMealThumb()).into(holder.productImageView);
-        holder.productNameTextView.setText(product.getStrMeal());
+        Glide.with(context).load(product.getStrMealThumb()).into(holder.productItem_ImgV);
+        holder.productItemName_Tv.setText(product.getStrMeal());
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateProducts(ArrayList<Product> products){
@@ -51,13 +51,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView productImageView;
-        private TextView productNameTextView;
+        private ImageView productItem_ImgV;
+        private ImageView productItemSave_ImgV;
+        private ImageView productItemCart_ImgV;
+        private TextView productItemName_Tv;
+        private TextView productItemPrice_Tv;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            productImageView = itemView.findViewById(R.id.productImage_imgV);
-            productNameTextView = itemView.findViewById(R.id.productName_tv);
+            productItem_ImgV = itemView.findViewById(R.id.productItem_ImgV);
+            productItemSave_ImgV = itemView.findViewById(R.id.productItemSave_ImgV);
+            productItemCart_ImgV = itemView.findViewById(R.id.productItemCart_ImgV);
+            productItemName_Tv = itemView.findViewById(R.id.addressItemName_Tv);
+            productItemPrice_Tv = itemView.findViewById(R.id.productItemPrice_Tv);
         }
     }
 }
