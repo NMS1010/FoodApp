@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,18 +20,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40sdp"
-            android:text="@string/change_password_label"
+            android:text="Address"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_18ssp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/inputCurrentPassword_changePassword"
+            android:id="@+id/addressDetailName_Et"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/current_password"
+            android:hint="Name"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -40,35 +41,61 @@
             android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/inputNewPassword_changePassword"
+            android:id="@+id/addressDetailPhone_Et"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/new_password"
+            android:hint="Phone"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/inputConfirmNewPassword_changePassword"
+            android:id="@+id/addressDetailWard_Et"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/confirm_password"
+            android:hint="Ward"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
-            android:inputType="textPassword"
+            android:inputType="textEmailAddress"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_13ssp"/>
+
+        <EditText
+            android:id="@+id/addressDetailDistrict_Et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/background_input"
+            android:hint="District"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp" />
-
+        <EditText
+            android:id="@+id/addressDetailProvince_Et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/background_input"
+            android:hint="Province"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/_13ssp" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -79,7 +106,7 @@
                 android:id="@+id/btnUpdateProfile"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
-                android:text="@string/change_password"
+                android:text="Create / Update"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"
@@ -92,7 +119,7 @@
                 android:visibility="invisible"/>
         </FrameLayout>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBackChangePassword"
+            android:id="@+id/btnBackUpdateProfile"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:text="@string/back"

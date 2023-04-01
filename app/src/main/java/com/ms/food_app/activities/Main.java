@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 import com.ms.food_app.R;
 
-public class MainActivity extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
