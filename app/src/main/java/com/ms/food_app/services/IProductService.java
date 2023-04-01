@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface IProductService {
-    @GET("/appfoods/lastproduct.php")
+    @GET("appfoods/lastproduct.php")
     Call<ArrayList<Product>> getAllProducts();
 }

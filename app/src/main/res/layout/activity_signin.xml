@@ -35,22 +35,22 @@
             android:textStyle="bold"/>
 
         <EditText
-            android:id="@+id/inputUsername"
+            android:id="@+id/emailEt_Login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_40sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/username"
+            android:hint="@string/email"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/inputPassword"
+            android:id="@+id/passwordEt_Login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_40sdp"
@@ -65,7 +65,7 @@
             android:textSize="@dimen/_13ssp"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignIn"
+            android:id="@+id/signinBtn_Login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_20sdp"
@@ -76,7 +76,7 @@
             app:cornerRadius="@dimen/_8sdp"/>
 
         <TextView
-            android:id="@+id/textCreateNewAccount"
+            android:id="@+id/signupBtn_Login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_30sdp"

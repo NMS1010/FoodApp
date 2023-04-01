@@ -25,37 +25,13 @@
             android:textSize="@dimen/_18ssp"
             android:textStyle="bold"/>
 
-        <FrameLayout
-            android:id="@+id/layoutImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp">
-
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/imageProfile"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_80sdp"
-                android:background="@drawable/background_image"
-                android:scaleType="centerCrop"
-                app:riv_oval="true" />
-
-            <TextView
-                android:id="@+id/textAddImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Add Image"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/_10ssp"/>
-        </FrameLayout>
-
         <EditText
-            android:id="@+id/inputUserName"
+            android:id="@+id/firstNameEd_Signup"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/username"
+            android:hint="@string/first_name"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -65,22 +41,22 @@
             android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/inputName"
+            android:id="@+id/lastNameEd_Signup"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:background="@drawable/background_input"
-            android:hint="@string/name"
+            android:hint="@string/last_name"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="text"
             android:paddingStart="@dimen/_16sdp"
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/_13ssp"/>
+            android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/inputEmail"
+            android:id="@+id/emailEd_Signup"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
@@ -95,7 +71,7 @@
             android:textSize="@dimen/_13ssp"/>
 
         <EditText
-            android:id="@+id/inputPassword"
+            android:id="@+id/passwordEd_Signup"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
@@ -110,7 +86,7 @@
             android:textSize="@dimen/_13ssp"/>
 
         <EditText
-            android:id="@+id/inputConfirmPassword"
+            android:id="@+id/confirmPasswordEd_Signup"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
@@ -130,7 +106,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             android:animateLayoutChanges="true">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSignUp"
+                android:id="@+id/signUpBtn_Signup"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:text="@string/sign_up"
@@ -147,7 +123,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textSignIn"
+            android:id="@+id/loginBtn_Signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
