@@ -4,8 +4,15 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,9 +25,6 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.Signup"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Home"
             android:exported="false" />
         <activity
             android:name=".activities.AddressList"
@@ -45,12 +49,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.Main"
-            android:exported="false" />
-        <activity
-            android:name=".activities.MyOrder"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Profile"
             android:exported="false" />
         <activity
             android:name=".activities.Signin"

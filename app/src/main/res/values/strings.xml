@@ -30,5 +30,10 @@
     <string name="order">Đơn hàng</string>
     <string name="user">Profile</string>
     <string name="setting">Cài đặt</string>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="genderItem">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
 </resources>

@@ -107,7 +107,7 @@ public class Signup extends AppCompatActivity {
             binding.confirmPasswordEdSignup.setError("Enter your confirm password");
             return false;
         }
-        if (!binding.passwordEdSignup.getText().toString().trim().equals(binding.passwordEdSignup.getText().toString().trim())) {
+        if (!binding.passwordEdSignup.getText().toString().trim().equals(binding.confirmPasswordEdSignup.getText().toString().trim())) {
             binding.confirmPasswordEdSignup.setError("Password doesn't match");
             return false;
         }

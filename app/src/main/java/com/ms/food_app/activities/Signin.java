@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivitySigninBinding;
 import com.ms.food_app.models.User;
 import com.ms.food_app.models.requests.LoginRequest;
@@ -20,13 +19,6 @@ import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
 import com.ms.food_app.utils.SharedPrefManager;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +32,7 @@ public class Signin extends AppCompatActivity {
         setContentView(binding.getRoot());
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, Home.class));
+            startActivity(new Intent(this, Main.class));
         }
         setEvents();
     }
@@ -114,7 +106,7 @@ public class Signin extends AppCompatActivity {
                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()) {
                     showToast("Logging successfully");
                     finish();
-                    Intent intent = new Intent(Signin.this, Home.class);
+                    Intent intent = new Intent(Signin.this, Main.class);
                     startActivity(intent);
                 }else{
                     showToast("Cannot login");

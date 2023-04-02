@@ -1,21 +1,25 @@
-package com.ms.food_app.activities;
+package com.ms.food_app.fragments;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.ms.food_app.R;
+import com.ms.food_app.activities.Cart;
 import com.ms.food_app.adapters.CategoryAdapter;
 import com.ms.food_app.adapters.ProductAdapter;
 import com.ms.food_app.adapters.SliderAdapter;
-import com.ms.food_app.databinding.ActivityHomeBinding;
+import com.ms.food_app.databinding.FragmentHomeBinding;
 import com.ms.food_app.models.Category;
 import com.ms.food_app.models.Product;
 import com.ms.food_app.services.BaseAPIService;
@@ -32,22 +36,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Home extends AppCompatActivity {
-    private ActivityHomeBinding binding;
+public class Home extends Fragment {
+    private FragmentHomeBinding binding;
     private ArrayList<Category> categories;
     private CategoryAdapter categoryAdapter;
     private ArrayList<Product> products;
     private ProductAdapter productAdapter;
     private SliderAdapter sliderAdapter;
     private List<Integer> images;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        binding = ActivityHomeBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+    public Home() {
+        // Required empty public constructor
+    }
+    public static Home newInstance(String param1, String param2) {
+        return new Home();
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        // Inflate the layout for this fragment
+        setAdapter();
+        setEvents();
+        LoadCategories();
+        LoadProducts();
+        return binding.getRoot();
+    }
+    private void setAdapter(){
         categories = new ArrayList<>();
         products = new ArrayList<>();
         images = new ArrayList<Integer>(){
@@ -58,30 +78,31 @@ public class Home extends AppCompatActivity {
             }
         };
 
-        categoryAdapter = new CategoryAdapter(this, categories);
-        productAdapter = new ProductAdapter(this, products);
-        sliderAdapter = new SliderAdapter(this, images);
+        categoryAdapter = new CategoryAdapter(getActivity(), categories);
+        productAdapter = new ProductAdapter(getActivity(), products);
+        sliderAdapter = new SliderAdapter(getActivity(), images);
 
         binding.imageSlider.setSliderAdapter(sliderAdapter);
-        binding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        binding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM);
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         binding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
         binding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
-        binding.imageSlider.setScrollTimeInSec(4); //set scroll delay in seconds :
+        binding.imageSlider.setScrollTimeInSec(4);
         binding.imageSlider.setAutoCycle(true);
         binding.imageSlider.startAutoCycle();
 
         binding.categoryRV.setAdapter(categoryAdapter);
-        binding.categoryRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        binding.categoryRV.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
         binding.productRV.setAdapter(productAdapter);
-        binding.productRV.setLayoutManager(new GridLayoutManager(this, 2));
-
-        LoadCategories();
-        LoadProducts();
+        binding.productRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
     }
-
+    private void setEvents(){
+        binding.cartBtnHome.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), Cart.class));
+        });
+    }
     private void LoadCategories(){
         BaseAPIService.createService(ICategoryService.class).getAllCategories().enqueue(new Callback<ArrayList<Category>>() {
             @Override
