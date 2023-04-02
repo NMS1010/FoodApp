@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ms.food_app.R;
+import com.ms.food_app.databinding.CategoryItemBinding;
+import com.ms.food_app.databinding.CategoryItemBinding;
 import com.ms.food_app.models.Category;
 
 import java.util.ArrayList;
@@ -29,15 +31,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View categoryItem = LayoutInflater.from(context).inflate(R.layout.category_item, parent, false);
-        return new CategoryViewHolder(categoryItem);
+        CategoryItemBinding binding = CategoryItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new CategoryViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categories.get(position);
-        Glide.with(context).load(category.getImages()).into(holder.categoryImageView);
-        holder.categoryNameTextView.setText(category.getName());
+        Glide.with(context).load(category.getImages()).into(holder.binding.categoryImageImgVHome);
+        holder.binding.categoryNameTvHome.setText(category.getName());
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateCategories(ArrayList<Category> categories){
@@ -52,13 +54,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView categoryImageView;
-        private TextView categoryNameTextView;
+        private CategoryItemBinding binding;
 
-        public CategoryViewHolder(@NonNull View itemView) {
-            super(itemView);
-            categoryImageView = itemView.findViewById(R.id.categoryImage_imgV);
-            categoryNameTextView = itemView.findViewById(R.id.categoryName_tv);
+        public CategoryViewHolder(@NonNull CategoryItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

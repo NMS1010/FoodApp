@@ -107,8 +107,7 @@ public class Home extends Fragment {
         BaseAPIService.createService(ICategoryService.class).getAllCategories().enqueue(new Callback<ArrayList<Category>>() {
             @Override
             public void onResponse(Call<ArrayList<Category>> call, Response<ArrayList<Category>> response) {
-                if(response.isSuccessful()) {
-                    assert response.body() != null;
+                if(response.isSuccessful() && response.body() != null) {
                     categoryAdapter.updateCategories(response.body());
                 }
             }
