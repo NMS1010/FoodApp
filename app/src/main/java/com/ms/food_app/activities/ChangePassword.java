@@ -8,6 +8,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ms.food_app.databinding.ActivityChangePasswordBinding;
+import com.ms.food_app.fragments.Home;
+import com.ms.food_app.fragments.Profile;
 
 public class ChangePassword extends AppCompatActivity {
     ActivityChangePasswordBinding binding;
@@ -22,7 +24,9 @@ public class ChangePassword extends AppCompatActivity {
     }
     private void setEvents(){
         binding.btnBackChangePassword.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), Profile.class));
+            Intent intent = new Intent(getApplicationContext(), Main.class);
+            intent.putExtra("Check", "Setting");
+            startActivity(intent);
         });
     }
 }
