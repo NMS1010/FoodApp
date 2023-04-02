@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 public class User {
+    private long id;
     private String firstname;
 
     private String lastname;
@@ -24,17 +25,12 @@ public class User {
 
     private List<Address> addresses;
 
-    public User(String firstname, String lastname, String email, String phone, String gender, String birthday, Set<String> roles, String avatar, long cartId, List<Address> addresses) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phone = phone;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.roles = roles;
-        this.avatar = avatar;
-        this.cartId = cartId;
-        this.addresses = addresses;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstname() {

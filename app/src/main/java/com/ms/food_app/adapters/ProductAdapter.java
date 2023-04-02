@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ms.food_app.R;
+import com.ms.food_app.databinding.ProductItemBinding;
 import com.ms.food_app.models.Product;
 
 import java.util.ArrayList;
@@ -28,15 +29,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View productItem = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false);
-        return new ProductViewHolder(productItem);
+        ProductItemBinding binding = ProductItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ProductViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        Glide.with(context).load(product.getStrMealThumb()).into(holder.productItem_ImgV);
-        holder.productItemName_Tv.setText(product.getStrMeal());
+        Glide.with(context).load(product.getImages().get(0)).into(holder.binding.productItemImgVHome);
+        holder.binding.productItemNameTvHome.setText(product.getName());
+        holder.binding.productItemPriceTvHome.setText(String.valueOf(product.getPrice()));
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateProducts(ArrayList<Product> products){
@@ -51,19 +53,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView productItem_ImgV;
-        private ImageView productItemSave_ImgV;
-        private ImageView productItemCart_ImgV;
-        private TextView productItemName_Tv;
-        private TextView productItemPrice_Tv;
+        private ProductItemBinding binding;
 
-        public ProductViewHolder(@NonNull View itemView) {
-            super(itemView);
-            productItem_ImgV = itemView.findViewById(R.id.productItem_ImgV);
-            productItemSave_ImgV = itemView.findViewById(R.id.productItemSave_ImgV);
-            productItemCart_ImgV = itemView.findViewById(R.id.productItemCart_ImgV);
-            productItemName_Tv = itemView.findViewById(R.id.addressItemName_Tv);
-            productItemPrice_Tv = itemView.findViewById(R.id.productItemPrice_Tv);
+        public ProductViewHolder(@NonNull ProductItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

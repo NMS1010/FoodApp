@@ -47,7 +47,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/productItem_ImgV"
+            android:id="@+id/productItemImgV_home"
             android:layout_width="match_parent"
             android:layout_height="224dp"
             android:scaleType="centerCrop"
@@ -63,7 +63,7 @@
 
 
             <TextView
-                android:id="@+id/addressItemName_Tv"
+                android:id="@+id/productItemNameTv_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/productItemPrice_Tv"
+                android:id="@+id/productItemPriceTv_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -93,7 +93,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/productItemCart_ImgV"
+                android:id="@+id/productItemCartBtn_home"
                 android:src="@drawable/ic_shopping_cart_black_24dp"
                 app:tint="@color/fbutton_color_green_sea"
                 android:layout_alignParentRight="true"
