@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.ms.food_app.R;
+import com.ms.food_app.activities.AddressList;
+import com.ms.food_app.activities.ChangePassword;
+import com.ms.food_app.activities.IntroScreen;
+import com.ms.food_app.activities.MyReview;
+import com.ms.food_app.activities.SaveList;
 import com.ms.food_app.activities.Signin;
 import com.ms.food_app.activities.UpdateProfile;
 import com.ms.food_app.databinding.FragmentProfileBinding;
@@ -43,8 +48,25 @@ public class Profile extends Fragment {
         return binding.getRoot();
     }
     private void setEvents(){
-        binding.updateBtnUpdateProfile.setOnClickListener(view -> {
+        binding.updateProfile.setOnClickListener(view -> {
+
             startActivity(new Intent(getActivity(), UpdateProfile.class));
+        });
+        binding.Address.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), AddressList.class));
+        });
+        binding.Favorite.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), SaveList.class));
+        });
+        binding.logout.setOnClickListener(view -> {
+            SharedPrefManager.getInstance(getContext()).logout();
+            startActivity(new Intent(getActivity(), IntroScreen.class));
+        });
+        binding.changePasswordLayout.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), ChangePassword.class));
+        });
+        binding.myReview.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), MyReview.class));
         });
     }
     private void loadProfile(){
@@ -52,14 +74,10 @@ public class Profile extends Fragment {
             startActivity(new Intent(getActivity(), Signin.class));
         }
         User user = SharedPrefManager.getInstance(getContext()).getUser();
-        binding.firstNameTvProfile.setText(user.getFirstname());
-        binding.lastNameTvProfile.setText(user.getLastname());
-        binding.emailTvProfile.setText(user.getEmail());
-        binding.phoneTvProfile.setText(user.getPhone());
-        binding.birthdayTvProfile.setText(user.getBirthday());
-        binding.genderTvProfile.setText(user.getGender());
+        binding.nameUser.setText(user.getFirstname() + " " + user.getLastname());
+        binding.emailUser.setText(user.getEmail());
         Glide.with(this)
                 .load(user.getAvatar())
-                .into(binding.avatarImgVProfile);
+                .into(binding.imageUser);
     }
 }

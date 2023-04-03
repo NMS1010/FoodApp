@@ -27,7 +27,7 @@
     <string name="delivered">Đã giao</string>
     <string name="cancelled">Đã hủy</string>
     <string name="home">Home</string>
-    <string name="order">Đơn hàng</string>
+    <string name="order">My Order</string>
     <string name="user">Profile</string>
     <string name="setting">Cài đặt</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -36,4 +36,5 @@
         <item>Nam</item>
         <item>Nữ</item>
     </string-array>
+    <string name="see_all">See More</string>
 </resources>
