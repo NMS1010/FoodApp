@@ -1,6 +1,8 @@
 package com.ms.food_app.models;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem  implements Serializable {
     private long cartId;
     private int count;
     private Product product;

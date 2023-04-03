@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:id="@+id/delete_icon"
+            android:id="@+id/deleteBtn_saveItem"
             android:src="@drawable/ic_delete_black_24dp"
             android:layout_alignParentRight="true"
             app:tint="@color/colorBlack"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/delete_icon"
+            android:layout_toLeftOf="@id/deleteBtn_saveItem"
             android:text="DELETE"
             android:textColor="@android:color/black"
             android:textSize="13sp"/>
@@ -47,7 +47,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/productItemImgV_home"
+            android:id="@+id/saveItemImgV_save"
             android:layout_width="match_parent"
             android:layout_height="224dp"
             android:scaleType="centerCrop"
@@ -63,7 +63,7 @@
 
 
             <TextView
-                android:id="@+id/productItemNameTv_home"
+                android:id="@+id/saveItemNameTv_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/productItemPriceTv_home"
+                android:id="@+id/saveItemPriceTv_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -93,7 +93,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/productItemCartBtn_home"
+                android:id="@+id/cartBtn_save"
                 android:src="@drawable/ic_shopping_cart_black_24dp"
                 app:tint="@color/fbutton_color_green_sea"
                 android:layout_alignParentRight="true"

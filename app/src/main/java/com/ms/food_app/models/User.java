@@ -1,9 +1,10 @@
 package com.ms.food_app.models;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class User {
+public class User implements Serializable {
     private long id;
     private String firstname;
 

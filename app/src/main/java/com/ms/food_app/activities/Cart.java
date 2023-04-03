@@ -59,8 +59,10 @@ public class Cart extends AppCompatActivity {
         binding.cartRVCart.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
     private void loadCart(){
-        if(!SharedPrefManager.getInstance(this).isLoggedIn())
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            startActivity(new Intent(this, Signin.class));
             return;
+        }
         User currentUser = SharedPrefManager.getInstance(this).getUser();
         BaseAPIService.createService(ICartService.class).getCartByUserId(currentUser.getId()).enqueue(new Callback<com.ms.food_app.models.Cart>() {
             @Override

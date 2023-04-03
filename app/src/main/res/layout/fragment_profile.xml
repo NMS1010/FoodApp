@@ -169,7 +169,7 @@
             app:layout_constraintVertical_bias="0.544" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnUpdateProfile"
+            android:id="@+id/updateBtn_updateProfile"
             android:layout_width="349dp"
             android:layout_height="65dp"
             android:text="@string/update_profile"

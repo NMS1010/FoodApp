@@ -19,6 +19,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/pendingBtn_orderList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -27,6 +28,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <Button
+                android:id="@+id/processingBtn_orderList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -35,6 +37,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <Button
+                android:id="@+id/shippingBtn_orderList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -43,6 +46,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <Button
+                android:id="@+id/completedBtn_orderList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -51,6 +55,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <Button
+                android:id="@+id/canceledBtn_orderList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -63,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/orderList_RV"
+            android:id="@+id/orderRV_orderList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.core.widget.NestedScrollView>
