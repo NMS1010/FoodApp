@@ -1,6 +1,5 @@
 package com.ms.food_app.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -8,18 +7,15 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityMainBinding;
 import com.ms.food_app.fragments.Home;
 import com.ms.food_app.fragments.MyOrder;
 import com.ms.food_app.fragments.Profile;
-import com.ms.food_app.fragments.Setting;
 
 public class Main extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -53,10 +49,6 @@ public class Main extends AppCompatActivity {
                 loadFragment(new MyOrder());
                 binding.bottomNavigation.setSelectedItemId(R.id.order_page);
                 break;
-            case "Setting":
-                loadFragment(new Setting());
-                binding.bottomNavigation.setSelectedItemId(R.id.setting_page);
-                break;
             default:
                 loadFragment(new Home());
                 binding.bottomNavigation.setSelectedItemId(R.id.home_page);
@@ -78,10 +70,6 @@ public class Main extends AppCompatActivity {
                         return true;
                     case R.id.profile_page:
                         fragment = new Profile();
-                        loadFragment(fragment);
-                        return true;
-                    case R.id.setting_page:
-                        fragment = new Setting();
                         loadFragment(fragment);
                         return true;
                 }

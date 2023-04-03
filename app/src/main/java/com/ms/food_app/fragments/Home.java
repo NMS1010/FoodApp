@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.ms.food_app.R;
 import com.ms.food_app.activities.Cart;
+import com.ms.food_app.activities.Search;
 import com.ms.food_app.adapters.CategoryAdapter;
 import com.ms.food_app.adapters.ProductAdapter;
 import com.ms.food_app.adapters.SliderAdapter;
@@ -99,8 +100,11 @@ public class Home extends Fragment {
         binding.productRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
     }
     private void setEvents(){
-        binding.cartBtnHome.setOnClickListener(view -> {
+        binding.cart.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), Cart.class));
+        });
+        binding.searchView.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), Search.class));
         });
     }
     private void LoadCategories(){

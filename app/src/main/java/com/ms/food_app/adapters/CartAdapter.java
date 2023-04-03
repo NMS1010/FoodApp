@@ -38,11 +38,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartAdapter.CartViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
-        Glide.with(context).load(cartItem.getProduct().getImages().get(0)).into(holder.binding.cartItemImgVCart);
-        holder.binding.cartItemNameTvCart.setText(cartItem.getProduct().getName());
-        holder.binding.cartItemPriceTvCart.setText(String.valueOf(cartItem.getProduct().getPrice()));
-        holder.binding.cartItemQuantityEtCart.setText(String.valueOf(cartItem.getCount()));
+        Glide.with(context).load(cartItem.getProduct().getImages().get(0)).into(holder.binding.imageFood);
+        holder.binding.nameFood.setText(cartItem.getProduct().getName());
+        holder.binding.priceFood.setText(String.valueOf(cartItem.getProduct().getPrice()));
+        holder.binding.count.setText(String.valueOf(cartItem.getCount()));
     }
+
     @SuppressLint("NotifyDataSetChanged")
     public void updateCart(List<CartItem> cartItems){
         this.cartItems = cartItems;
