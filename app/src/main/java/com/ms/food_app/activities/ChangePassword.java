@@ -23,7 +23,7 @@ public class ChangePassword extends AppCompatActivity {
         setEvents();
     }
     private void setEvents(){
-        binding.btnBackChangePassword.setOnClickListener(view -> {
+        binding.backBtnChangePassword.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), Main.class);
             intent.putExtra("Check", "Setting");
             startActivity(intent);

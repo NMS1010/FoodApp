@@ -43,7 +43,7 @@ public class Profile extends Fragment {
         return binding.getRoot();
     }
     private void setEvents(){
-        binding.btnUpdateProfile.setOnClickListener(view -> {
+        binding.updateBtnUpdateProfile.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), UpdateProfile.class));
         });
     }

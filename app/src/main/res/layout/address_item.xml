@@ -17,7 +17,7 @@
         android:weightSum="5">
 
         <TextView
-            android:id="@+id/productItemNameTv_home"
+            android:id="@+id/addressItemFullNameTv_address"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -27,7 +27,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/addressItemStreet_Tv"
+            android:id="@+id/addressItemStreetTv_address"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -35,7 +35,7 @@
             android:text="Võ Văn Ngân" />
 
         <TextView
-            android:id="@+id/addressItemWDP_Tv"
+            android:id="@+id/addressItemWDPTv_address"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -43,7 +43,7 @@
             android:text="Linh Chiểu, Thủ Đức, TP HCM" />
 
         <TextView
-            android:id="@+id/addressItemPhone_Tv"
+            android:id="@+id/addressItemPhoneTv_address"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -55,7 +55,7 @@
             android:layout_height="49dp">
 
             <ImageView
-                android:id="@+id/productItemCartBtn_home"
+                android:id="@+id/addressItemDeleteBtn_address"
                 android:layout_width="34dp"
                 android:layout_height="38dp"
                 android:layout_alignParentEnd="true"
@@ -64,7 +64,7 @@
                 android:src="@drawable/trash" />
 
             <ImageView
-                android:id="@+id/productItemSaveBtn_home"
+                android:id="@+id/addressItemEditBtn_address"
                 android:layout_width="40dp"
                 android:layout_height="35dp"
                 android:layout_alignParentStart="true"

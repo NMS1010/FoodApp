@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ms.food_app.R;
+import com.ms.food_app.activities.AddressList;
 import com.ms.food_app.activities.ChangePassword;
 import com.ms.food_app.activities.Signin;
 import com.ms.food_app.databinding.FragmentSettingBinding;
@@ -39,6 +40,9 @@ public class Setting extends Fragment {
         return binding.getRoot();
     }
     private void setEvents(){
+        binding.addressBtnSetting.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), AddressList.class));
+        });
         binding.changepassBtnSetting.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), ChangePassword.class));
         });

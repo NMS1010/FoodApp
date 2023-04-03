@@ -176,7 +176,7 @@ public class UpdateProfile extends AppCompatActivity {
         datePickerDialog.show();
     }
     private void setEvents(){
-        binding.btnBackUpdateProfile.setOnClickListener(view -> {
+        binding.backBtnUpdateProfile.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), Main.class);
             intent.putExtra("Check", "Profile");
             startActivity(intent);

@@ -1,8 +1,9 @@
 package com.ms.food_app.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Product {
+public class Product  implements Serializable {
     private long id;
     private String name;
 

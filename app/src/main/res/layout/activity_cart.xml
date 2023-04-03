@@ -50,7 +50,8 @@
                     android:id="@+id/totalPriceTv_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="  RM 50.00"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:text="50000 VND"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />
 

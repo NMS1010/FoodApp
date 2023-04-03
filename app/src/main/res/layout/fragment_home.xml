@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/firstNameTv_updateProfile"
+            android:id="@+id/searchBar_home"
             android:layout_width="251dp"
             android:layout_height="38dp"
             android:layout_marginStart="16dp"
@@ -101,7 +101,7 @@
             android:layout_height="38dp"
             android:layout_marginStart="28dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/firstNameTv_updateProfile"
+            app:layout_constraintStart_toEndOf="@+id/searchBar_home"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.22"
             app:srcCompat="@drawable/shopping_cart" />
