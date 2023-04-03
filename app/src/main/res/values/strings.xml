@@ -10,6 +10,7 @@
     <string name="change_password_label">Change Password</string>
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
+    <string name="name">Name</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="phone">Phone</string>
@@ -26,8 +27,14 @@
     <string name="delivered">Đã giao</string>
     <string name="cancelled">Đã hủy</string>
     <string name="home">Home</string>
-    <string name="order">Đơn hàng</string>
+    <string name="order">My Order</string>
     <string name="user">Profile</string>
     <string name="setting">Cài đặt</string>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="genderItem">
+        <item>Nam</item>
+        <item>Nữ</item>
+    </string-array>
+    <string name="see_all">See More</string>
 </resources>

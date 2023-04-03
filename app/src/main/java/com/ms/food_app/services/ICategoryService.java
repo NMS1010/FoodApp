@@ -8,6 +8,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ICategoryService {
-    @GET("/appfoods/categories.php")
+    @GET("categorise")
     Call<ArrayList<Category>> getAllCategories();
 }

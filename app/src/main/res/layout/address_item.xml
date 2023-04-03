@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/_8sdp"
+    android:layout_marginLeft="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_8sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/addressItemFullNameTv_address"
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="8"
+            android:text="Nguyễn Minh Sơn"
+            android:textColor="@color/fbutton_color_green_sea"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addressItemStreetTv_address"
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="8"
+            android:text="Võ Văn Ngân" />
+
+        <TextView
+            android:id="@+id/addressItemWDPTv_address"
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="8"
+            android:text="Linh Chiểu, Thủ Đức, TP HCM" />
+
+        <TextView
+            android:id="@+id/addressItemPhoneTv_address"
+            android:layout_width="296dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="8"
+            android:text="0354964840" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp">
+
+            <ImageView
+                android:id="@+id/addressItemDeleteBtn_address"
+                android:layout_width="34dp"
+                android:layout_height="38dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="98dp"
+                android:layout_marginRight="36dp"
+                android:src="@drawable/trash" />
+
+            <ImageView
+                android:id="@+id/addressItemEditBtn_address"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="69dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:src="@drawable/edit"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

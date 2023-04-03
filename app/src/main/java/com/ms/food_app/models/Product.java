@@ -1,57 +1,85 @@
 package com.ms.food_app.models;
 
-public class Product {
-    private int id;
-    private String strMeal;
-    private String strMealThumb;
-    private int idMeal;
-    private int idCategory;
+import java.io.Serializable;
+import java.util.List;
 
-    public Product(int id, String strMeal, String strMealThumb, int idMeal, int idCategory) {
-        this.id = id;
-        this.strMeal = strMeal;
-        this.strMealThumb = strMealThumb;
-        this.idMeal = idMeal;
-        this.idCategory = idCategory;
-    }
+public class Product  implements Serializable {
+    private long id;
+    private String name;
 
-    public int getId() {
+    private String description;
+
+    private double price;
+
+    private double promotionalPrice;
+
+    private int quantity;
+
+    private long category;
+
+    private List<String> images;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getStrMeal() {
-        return strMeal;
+    public String getName() {
+        return name;
     }
 
-    public void setStrMeal(String strMeal) {
-        this.strMeal = strMeal;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getStrMealThumb() {
-        return strMealThumb;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStrMealThumb(String strMealThumb) {
-        this.strMealThumb = strMealThumb;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getIdMeal() {
-        return idMeal;
+    public double getPrice() {
+        return price;
     }
 
-    public void setIdMeal(int idMeal) {
-        this.idMeal = idMeal;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public int getIdCategory() {
-        return idCategory;
+    public double getPromotionalPrice() {
+        return promotionalPrice;
     }
 
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
+    public void setPromotionalPrice(double promotionalPrice) {
+        this.promotionalPrice = promotionalPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public long getCategory() {
+        return category;
+    }
+
+    public void setCategory(long category) {
+        this.category = category;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }
