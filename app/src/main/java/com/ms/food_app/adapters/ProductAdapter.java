@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ms.food_app.R;
-import com.ms.food_app.databinding.ProductItemBinding;
+import com.ms.food_app.databinding.ProductItemHorizontalBinding;
 import com.ms.food_app.models.Product;
 
 import java.util.ArrayList;
@@ -29,16 +29,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ProductItemBinding binding = ProductItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ProductItemHorizontalBinding binding = ProductItemHorizontalBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ProductViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        Glide.with(context).load(product.getImages().get(0)).into(holder.binding.productItemImgVHome);
-        holder.binding.productItemNameTvHome.setText(product.getName());
-        holder.binding.productItemPriceTvHome.setText(String.valueOf(product.getPrice()));
+        Glide.with(context).load(product.getImages().get(0)).into(holder.binding.imageFood);
+        holder.binding.nameFood.setText(product.getName());
+        holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateProducts(ArrayList<Product> products){
@@ -53,9 +53,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        private ProductItemBinding binding;
+        private ProductItemHorizontalBinding binding;
 
-        public ProductViewHolder(@NonNull ProductItemBinding binding) {
+        public ProductViewHolder(@NonNull ProductItemHorizontalBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

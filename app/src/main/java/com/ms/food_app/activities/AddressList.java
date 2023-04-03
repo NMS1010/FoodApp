@@ -42,9 +42,9 @@ public class AddressList extends AppCompatActivity {
         loadAddress();
     }
     private void setEvents(){
-        binding.backBtnAddress.setOnClickListener(view -> {
+        binding.backBtn.setOnClickListener(view -> {
             Intent intent = new Intent(this, Main.class);
-            intent.putExtra("Check", "Setting");
+            intent.putExtra("Check", "Profile");
             startActivity(intent);
         });
         binding.addNewBtnAddress.setOnClickListener(view -> {

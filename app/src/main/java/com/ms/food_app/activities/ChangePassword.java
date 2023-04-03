@@ -25,7 +25,7 @@ public class ChangePassword extends AppCompatActivity {
     private void setEvents(){
         binding.backBtnChangePassword.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), Main.class);
-            intent.putExtra("Check", "Setting");
+            intent.putExtra("Check", "Profile");
             startActivity(intent);
         });
     }

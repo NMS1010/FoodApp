@@ -9,9 +9,6 @@
     <color name="icon_background">#20FFFFFF</color>
     <color name="error">#B00020</color>
     <color name="received_message_background">#090D16</color>
-    <color name="colorPrimary">#004d40</color>
-    <color name="colorPrimaryDark">#102931</color>
-    <color name="colorAccent">#39796b</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
 
@@ -67,4 +64,18 @@
     <color name="fbutton_color_concrete">#95a5a6</color>
     <color name="fbutton_color_asbestos">#7f8c8d</color>
     <color name="fbutton_color_transparent">@android:color/transparent</color>
+    <color name="colorPrimary">#DB3022</color>
+    <color name="colorPrimaryWithHalfTrans">#16DB3022</color>
+    <color name="WhiteText">#F7F7F7</color>
+    <color name="colorPrimaryDark">#D82B1D</color>
+    <color name="colorAccent">#FF3636</color>
+    <color name="White">#FFFF</color>
+    <color name="textColor">#000000</color>
+    <color name="black">#000000</color>
+    <color name="BgLayout">#F8F5F2</color>
+    <color name="Green">#43A047</color>
+    <color name="Grey">#FBFBFB</color>
+    <color name="GreyV2">#BABABA</color>
+    <color name="transparent">#00000000</color>
+    <color name="Gold">#FAC213</color>
 </resources>

@@ -45,18 +45,21 @@ public class Cart extends AppCompatActivity {
         setEvents();
     }
     private void setEvents(){
-        binding.backBtnCart.setOnClickListener(view -> {
+        binding.back.setOnClickListener(view -> {
             Intent intent = new Intent(this, Main.class);
             intent.putExtra("Check","Home");
             startActivity(intent);
+        });
+        binding.Checkout.setOnClickListener(view -> {
+            startActivity(new Intent(this, Checkout.class));
         });
     }
     private void setAdapter(){
         if(cart == null)
             cart = new com.ms.food_app.models.Cart(new ArrayList<>());
         adapter = new CartAdapter(this, cart.getCartItems());
-        binding.cartRVCart.setAdapter(adapter);
-        binding.cartRVCart.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        binding.cartRV.setAdapter(adapter);
+        binding.cartRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
     private void loadCart(){
         if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
@@ -74,7 +77,7 @@ public class Cart extends AppCompatActivity {
                     for (CartItem ci: cart.getCartItems()) {
                         totalPrice += ci.getCount() * ci.getProduct().getPrice();
                     }
-                    binding.totalPriceTvCart.setText(totalPrice + " VND");
+                    binding.totalPrice.setText(totalPrice + " VND");
                 }
             }
 
