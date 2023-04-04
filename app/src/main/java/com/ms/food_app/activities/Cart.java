@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -23,6 +24,8 @@ import com.ms.food_app.services.ICategoryService;
 import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +43,6 @@ public class Cart extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        setAdapter();
         loadCart();
         setEvents();
     }
@@ -57,7 +59,10 @@ public class Cart extends AppCompatActivity {
     private void setAdapter(){
         if(cart == null)
             cart = new com.ms.food_app.models.Cart(new ArrayList<>());
-        adapter = new CartAdapter(this, cart.getCartItems());
+        Consumer<Double> updateTotalPrice = totalPrice -> {
+            binding.totalPrice.setText(totalPrice + " VND");
+        };
+        adapter = new CartAdapter(this, cart.getCartItems(), updateTotalPrice);
         binding.cartRV.setAdapter(adapter);
         binding.cartRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
@@ -67,12 +72,14 @@ public class Cart extends AppCompatActivity {
             return;
         }
         User currentUser = SharedPrefManager.getInstance(this).getUser();
-        BaseAPIService.createService(ICartService.class).getCartByUserId(currentUser.getId()).enqueue(new Callback<com.ms.food_app.models.Cart>() {
+        BaseAPIService.createService(ICartService.class)
+                .getCartByUserId(currentUser.getId())
+                .enqueue(new Callback<com.ms.food_app.models.Cart>() {
             @Override
             public void onResponse(Call<com.ms.food_app.models.Cart> call, Response<com.ms.food_app.models.Cart> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     cart = response.body();
-                    adapter.updateCart(cart.getCartItems());
+                    setAdapter();
                     double totalPrice = 0;
                     for (CartItem ci: cart.getCartItems()) {
                         totalPrice += ci.getCount() * ci.getProduct().getPrice();

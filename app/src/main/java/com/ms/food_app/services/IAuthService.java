@@ -24,7 +24,6 @@ public interface IAuthService {
 
     @POST("auth/register")
     Call<AuthResponse> signup(@Body JsonObject params);
-
-    @GET("users/{id}")
-    Call<User> getCurrentUser(@Path("id") Long id);
+    @POST("auth/refresh")
+    Call<AuthResponse> refreshToken(@Body JsonObject params);
 }

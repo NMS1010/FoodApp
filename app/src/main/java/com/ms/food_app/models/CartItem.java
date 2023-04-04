@@ -3,9 +3,18 @@ package com.ms.food_app.models;
 import java.io.Serializable;
 
 public class CartItem  implements Serializable {
+    private long id;
     private long cartId;
     private int count;
     private Product product;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getCartId() {
         return cartId;

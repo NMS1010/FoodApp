@@ -2,6 +2,7 @@ package com.ms.food_app.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +14,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.CartItemBinding;
 import com.ms.food_app.models.Cart;
 import com.ms.food_app.models.CartItem;
+import com.ms.food_app.services.BaseAPIService;
+import com.ms.food_app.services.ICartService;
+import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.List;
+import java.util.function.Consumer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private Context context;
     private List<CartItem> cartItems;
+    private Consumer<Double> updateTotalPrice;
 
-    public CartAdapter(Context context, List<CartItem> cartItems) {
+    public CartAdapter(Context context, List<CartItem> cartItems,  Consumer<Double> updateTotalPrice) {
         this.context = context;
         this.cartItems = cartItems;
+        this.updateTotalPrice = updateTotalPrice;
     }
     @NonNull
     @Override
@@ -42,8 +56,72 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.binding.nameFood.setText(cartItem.getProduct().getName());
         holder.binding.priceFood.setText(String.valueOf(cartItem.getProduct().getPrice()));
         holder.binding.count.setText(String.valueOf(cartItem.getCount()));
+        holder.binding.delete.setOnClickListener(view -> {
+            removeCartItem(cartItem, position);
+        });
+        holder.binding.plus.setOnClickListener(view -> {
+            updateCartItem(cartItem, position, true);
+        });
+        holder.binding.minus.setOnClickListener(view -> {
+            int amount = cartItem.getCount() - 1;
+            if(amount <= 0){
+                removeCartItem(cartItem, position);
+            }
+            else{
+                updateCartItem(cartItem, position, false);
+            }
+        });
     }
+    private void updateCartItem(CartItem cartItem, int position, boolean isAdd){
+        int currCount = cartItem.getCount();
+        int newCount = isAdd ? currCount + 1 : currCount - 1;
+        cartItem.setCount(newCount);
+        String request = new Gson().toJson(cartItem);
+        JsonParser parser = new JsonParser();
+        BaseAPIService
+                .createService(ICartService.class)
+                .addProductToCart((JsonObject) parser.parse(request))
+                .enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cartItem.setCount(isAdd ? cartItem.getCount() + 1 : cartItem.getCount() - 1);
+                    notifyItemChanged(position);
+                    double totalPrice = 0;
+                    for (CartItem ci: response.body().getCartItems()) {
+                        totalPrice += (ci.getProduct().getPrice() * ci.getCount());
+                    }
+                    updateTotalPrice.accept(totalPrice);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+    private void removeCartItem(CartItem cartItem, int position){
+        BaseAPIService.createService(ICartService.class).removeOneProduct(cartItem.getId()).enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cartItems.remove(cartItem);
+                    notifyItemRemoved(position);
+                    double totalPrice = 0;
+                    for (CartItem ci: response.body().getCartItems()) {
+                        totalPrice += (ci.getProduct().getPrice() * ci.getCount());
+                    }
+                    updateTotalPrice.accept(totalPrice);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
     @SuppressLint("NotifyDataSetChanged")
     public void updateCart(List<CartItem> cartItems){
         this.cartItems = cartItems;
