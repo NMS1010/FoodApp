@@ -16,6 +16,7 @@ import com.ms.food_app.databinding.ActivityMainBinding;
 import com.ms.food_app.fragments.Home;
 import com.ms.food_app.fragments.MyOrder;
 import com.ms.food_app.fragments.Profile;
+import com.ms.food_app.utils.ContextUtil;
 
 public class Main extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -26,6 +27,7 @@ public class Main extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        ContextUtil.context = getApplicationContext();
         initialFragment();
         setEvents();
     }

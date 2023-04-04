@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -19,7 +18,9 @@ import com.ms.food_app.models.requests.LoginRequest;
 import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
+import com.ms.food_app.services.IUserService;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,7 +75,7 @@ public class Signin extends AppCompatActivity {
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
 
                 if(response.body() == null){
-                    showToast("Email or password is incorrect");
+                    ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
                     return;
                 }
                 if (!response.body().getAccessToken().equals("")) {
@@ -84,7 +85,7 @@ public class Signin extends AppCompatActivity {
                     saveCurrentUser(authResponse.getUserId());
 
                 }else{
-                    showToast("Email or password is incorrect");
+                    ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
                 }
             }
 
@@ -94,26 +95,23 @@ public class Signin extends AppCompatActivity {
             }
         });
     }
-    private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
     private void saveCurrentUser(long userId){
-        BaseAPIService.createService(IAuthService.class).getCurrentUser(userId).enqueue(new Callback<User>() {
+        BaseAPIService.createService(IUserService.class).getUserById(userId).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if(response.body() == null){
-                    showToast("Cannot login");
+                    ToastUtil.showToast(getApplicationContext(),"Cannot login");
                     return;
                 }
                 User currentUser = response.body();
                 SharedPrefManager.getInstance(getApplicationContext()).saveUser(currentUser);
                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()) {
-                    showToast("Logging successfully");
+                    ToastUtil.showToast(getApplicationContext(),"Logging successfully");
                     finish();
                     Intent intent = new Intent(Signin.this, Main.class);
                     startActivity(intent);
                 }else{
-                    showToast("Cannot login");
+                    ToastUtil.showToast(getApplicationContext(),"Cannot login");
                 }
             }
 
