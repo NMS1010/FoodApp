@@ -1,6 +1,7 @@
 package com.ms.food_app.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,10 @@ import com.ms.food_app.R;
 import com.ms.food_app.databinding.CartItemBinding;
 import com.ms.food_app.models.Cart;
 import com.ms.food_app.models.CartItem;
+import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICartService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.List;
@@ -36,11 +39,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private Context context;
     private List<CartItem> cartItems;
     private Consumer<Double> updateTotalPrice;
+    private ProgressDialog progress;
 
     public CartAdapter(Context context, List<CartItem> cartItems,  Consumer<Double> updateTotalPrice) {
         this.context = context;
         this.cartItems = cartItems;
         this.updateTotalPrice = updateTotalPrice;
+        progress = LoadingUtil.setLoading(context);
     }
     @NonNull
     @Override
@@ -60,7 +65,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             removeCartItem(cartItem, position);
         });
         holder.binding.plus.setOnClickListener(view -> {
-            updateCartItem(cartItem, position, true);
+            increaseCartItem(cartItem, position, cartItem.getCount() + 1);
         });
         holder.binding.minus.setOnClickListener(view -> {
             int amount = cartItem.getCount() - 1;
@@ -68,14 +73,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 removeCartItem(cartItem, position);
             }
             else{
-                updateCartItem(cartItem, position, false);
+                decreaseCartItem(cartItem, position);
             }
         });
     }
-    private void updateCartItem(CartItem cartItem, int position, boolean isAdd){
-        int currCount = cartItem.getCount();
-        int newCount = isAdd ? currCount + 1 : currCount - 1;
-        cartItem.setCount(newCount);
+    private void increaseCartItem(CartItem cartItem, int position, int count){
+        progress.show();
+        User currUser = SharedPrefManager.getInstance(context).getUser();
+        cartItem.setCount(count);
+        cartItem.setCartId(currUser.getCartId());
         String request = new Gson().toJson(cartItem);
         JsonParser parser = new JsonParser();
         BaseAPIService
@@ -85,24 +91,51 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    cartItem.setCount(isAdd ? cartItem.getCount() + 1 : cartItem.getCount() - 1);
+                    cartItem.setCount(count);
                     notifyItemChanged(position);
                     double totalPrice = 0;
                     for (CartItem ci: response.body().getCartItems()) {
                         totalPrice += (ci.getProduct().getPrice() * ci.getCount());
                     }
                     updateTotalPrice.accept(totalPrice);
+                    progress.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<Cart> call, Throwable t) {
                 Log.d("Error", t.getMessage());
+                progress.dismiss();
+            }
+        });
+    }
+    private void decreaseCartItem(CartItem cartItem, int position){
+        progress.show();
+        BaseAPIService.createService(ICartService.class).removeOneProduct(cartItem.getId()).enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    cartItem.setCount(cartItem.getCount() - 1);
+                    notifyItemChanged(position);
+                    double totalPrice = 0;
+                    for (CartItem ci: response.body().getCartItems()) {
+                        totalPrice += (ci.getProduct().getPrice() * ci.getCount());
+                    }
+                    updateTotalPrice.accept(totalPrice);
+                    progress.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                progress.dismiss();
             }
         });
     }
     private void removeCartItem(CartItem cartItem, int position){
-        BaseAPIService.createService(ICartService.class).removeOneProduct(cartItem.getId()).enqueue(new Callback<Cart>() {
+        progress.show();
+        BaseAPIService.createService(ICartService.class).removeAllProduct(cartItem.getId()).enqueue(new Callback<Cart>() {
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -113,12 +146,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         totalPrice += (ci.getProduct().getPrice() * ci.getCount());
                     }
                     updateTotalPrice.accept(totalPrice);
+                    progress.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<Cart> call, Throwable t) {
                 Log.d("Error", t.getMessage());
+                progress.dismiss();
             }
         });
     }

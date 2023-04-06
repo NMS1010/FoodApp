@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICartService;
 import com.ms.food_app.services.ICategoryService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class Cart extends AppCompatActivity {
     private ActivityCartBinding binding;
     private CartAdapter adapter;
     private com.ms.food_app.models.Cart cart;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public class Cart extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        progress = LoadingUtil.setLoading(this);
+        progress.show();
         loadCart();
         setEvents();
     }
@@ -79,12 +84,19 @@ public class Cart extends AppCompatActivity {
             public void onResponse(Call<com.ms.food_app.models.Cart> call, Response<com.ms.food_app.models.Cart> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     cart = response.body();
+                    if(cart.getCartItems().size() == 0){
+                        binding.noItem.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        binding.noItem.setVisibility(View.GONE);
+                    }
                     setAdapter();
                     double totalPrice = 0;
                     for (CartItem ci: cart.getCartItems()) {
                         totalPrice += ci.getCount() * ci.getProduct().getPrice();
                     }
                     binding.totalPrice.setText(totalPrice + " VND");
+                    progress.dismiss();
                 }
             }
 
