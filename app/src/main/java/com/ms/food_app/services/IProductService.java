@@ -12,6 +12,6 @@ public interface IProductService {
     @GET("products")
     Call<ArrayList<Product>> getAllProducts();
 
-    @GET("products")
+    @GET("product")
     Call<Product> getProductById(@Query("id") long id);
 }

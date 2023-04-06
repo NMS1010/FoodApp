@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityIntroScreenBinding;
+import com.ms.food_app.utils.ContextUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 public class IntroScreen extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class IntroScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         setEvents();
+        ContextUtil.context = getApplicationContext();
         if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
             finish();
             startActivity(new Intent(this, Main.class));

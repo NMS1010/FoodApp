@@ -2,6 +2,7 @@ package com.ms.food_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICartService;
 import com.ms.food_app.services.IProductService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 import com.ms.food_app.utils.ToastUtil;
 
@@ -29,7 +31,8 @@ import retrofit2.Response;
 
 public class ProductDetail extends AppCompatActivity {
     private ActivityProductDetailBinding binding;
-    private long productId = -1;
+    private ProgressDialog progress;
+    private Product product;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,36 +41,25 @@ public class ProductDetail extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         Intent intent = getIntent();
-        String param = intent.getStringExtra("productId");
+        progress = LoadingUtil.setLoading(this);
+        String param = intent.getStringExtra("product");
         if(param != null && !param.isEmpty()){
-            productId = Integer.parseInt(param);
+            product = new Gson().fromJson(param, Product.class);
+            loadProduct();
+            setEvents();
+        }else{
+            ToastUtil.showToast(this,"Cannot load product");
+            finish();
         }
-        loadProduct();
-        setEvents();
     }
     private void loadProduct(){
-        BaseAPIService
-                .createService(IProductService.class)
-                .getProductById(productId)
-                .enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    Product product = response.body();
-                    binding.nameDetail.setText(product.getName());
-                    binding.descripDetail.setText(product.getDescription());
-                    binding.priceDetail.setText(product.getPrice() + " VND");
-                    Glide.with(getApplicationContext())
-                            .load(product.getImages().get(0))
-                            .into(binding.imageDetail);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
+        binding.nameDetail.setText(product.getName());
+        binding.descripDetail.setText(product.getDescription());
+        binding.priceDetail.setText(product.getPrice() + " VND");
+        Glide.with(getApplicationContext())
+                .load(product.getImages().get(0))
+                .into(binding.imageDetail);
     }
     private void setEvents(){
         binding.back.setOnClickListener(view -> {
@@ -82,12 +74,11 @@ public class ProductDetail extends AppCompatActivity {
             startActivity(new Intent(this, Cart.class));
         });
         binding.addToCart.setOnClickListener(view -> {
+            progress.show();
             User currUser = SharedPrefManager.getInstance(this).getUser();
             CartItem cartItem = new CartItem();
             cartItem.setCount(1);
             cartItem.setCartId(currUser.getCartId());
-            Product product = new Product();
-            product.setId(productId);
             cartItem.setProduct(product);
             String request = new Gson().toJson(cartItem);
             JsonParser parser = new JsonParser();
@@ -99,6 +90,7 @@ public class ProductDetail extends AppCompatActivity {
                 public void onResponse(Call<com.ms.food_app.models.Cart> call, Response<com.ms.food_app.models.Cart> response) {
                     if(response.isSuccessful() && response.body() != null){
                         ToastUtil.showToast(getApplicationContext(), "Add product to your cart successfully");
+                        progress.dismiss();
                     }
                 }
 
