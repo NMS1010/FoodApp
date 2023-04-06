@@ -42,6 +42,9 @@ public class Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
+            startActivity(new Intent(getActivity(), Signin.class));
+        }
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         loadProfile();
         setEvents();

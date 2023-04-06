@@ -13,10 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.ms.food_app.R;
 import com.ms.food_app.activities.ProductDetail;
 import com.ms.food_app.databinding.ProductItemHorizontalBinding;
 import com.ms.food_app.models.Product;
+import com.ms.food_app.services.BaseAPIService;
 
 import java.util.ArrayList;
 
@@ -38,12 +40,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        Glide.with(context).load(product.getImages().get(0)).into(holder.binding.imageFood);
+        Glide.with(context).load(BaseAPIService.BASE_URL + product.getImages().get(0)).into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
         holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetail.class);
-            intent.putExtra("productId", product.getId());
+            intent.putExtra("product", new Gson().toJson(product));
             context.startActivity(intent);
         });
     }

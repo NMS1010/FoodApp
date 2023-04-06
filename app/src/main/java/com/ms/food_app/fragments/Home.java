@@ -1,5 +1,6 @@
 package com.ms.food_app.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.ms.food_app.R;
 import com.ms.food_app.activities.Cart;
 import com.ms.food_app.activities.Search;
+import com.ms.food_app.activities.Signin;
 import com.ms.food_app.adapters.CategoryAdapter;
 import com.ms.food_app.adapters.ProductAdapter;
 import com.ms.food_app.adapters.SliderAdapter;
@@ -26,6 +28,8 @@ import com.ms.food_app.models.Product;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICategoryService;
 import com.ms.food_app.services.IProductService;
+import com.ms.food_app.utils.LoadingUtil;
+import com.ms.food_app.utils.SharedPrefManager;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -45,6 +49,7 @@ public class Home extends Fragment {
     private ProductAdapter productAdapter;
     private SliderAdapter sliderAdapter;
     private List<Integer> images;
+    private ProgressDialog progress;
     public Home() {
         // Required empty public constructor
     }
@@ -62,6 +67,11 @@ public class Home extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
+        if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
+            startActivity(new Intent(getActivity(), Signin.class));
+        }
+        progress = LoadingUtil.setLoading(getActivity());
+        progress.show();
         setAdapter();
         setEvents();
         LoadCategories();
@@ -97,7 +107,7 @@ public class Home extends Fragment {
         binding.categoryRV.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false));
 
         binding.productRV.setAdapter(productAdapter);
-        binding.productRV.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.productRV.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
     }
     private void setEvents(){
         binding.cart.setOnClickListener(view -> {
@@ -126,9 +136,9 @@ public class Home extends Fragment {
         BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ArrayList<Product>>() {
             @Override
             public void onResponse(Call<ArrayList<Product>> call, Response<ArrayList<Product>> response) {
-                if(response.isSuccessful()) {
-                    assert response.body() != null;
+                if(response.isSuccessful() && response.body() != null) {
                     productAdapter.updateProducts(response.body());
+                    progress.dismiss();
                 }
             }
 
