@@ -3,6 +3,7 @@ package com.ms.food_app.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.ms.food_app.models.requests.RegisterRequest;
 import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import retrofit2.Response;
 
 public class Signup extends AppCompatActivity {
     private ActivitySignupBinding binding;
+    private ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class Signup extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        progress = LoadingUtil.setLoading(this);
         setEvents();
     }
     private void setEvents(){
@@ -62,7 +66,7 @@ public class Signup extends AppCompatActivity {
         RegisterRequest req = new RegisterRequest(firstName,lastName,email, password);
         String request = new Gson().toJson(req);
         JsonParser parser = new JsonParser();
-
+        progress.show();
         BaseAPIService.createService(IAuthService.class).signup((JsonObject)parser.parse(request)).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
@@ -79,11 +83,13 @@ public class Signup extends AppCompatActivity {
                 }else{
                     showToast("Failed to register account with this information");
                 }
+                progress.dismiss();
             }
 
             @Override
             public void onFailure(@NonNull Call<AuthResponse> call, @NonNull Throwable t) {
                 Log.d("error", t.getMessage());
+                progress.dismiss();
             }
         });
     }

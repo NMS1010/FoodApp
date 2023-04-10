@@ -49,6 +49,7 @@ public class Cart extends AppCompatActivity {
         progress = LoadingUtil.setLoading(this);
         progress.show();
         loadCart();
+        progress.dismiss();
         setEvents();
     }
     private void setEvents(){
@@ -59,6 +60,11 @@ public class Cart extends AppCompatActivity {
         });
         binding.Checkout.setOnClickListener(view -> {
             startActivity(new Intent(this, Checkout.class));
+        });
+        binding.MainButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, Main.class);
+            intent.putExtra("Check","Home");
+            startActivity(intent);
         });
     }
     private void setAdapter(){
@@ -73,7 +79,7 @@ public class Cart extends AppCompatActivity {
     }
     private void loadCart(){
         if(!SharedPrefManager.getInstance(this).isLoggedIn()) {
-            startActivity(new Intent(this, Signin.class));
+            startActivity(new Intent(this, IntroScreen.class));
             return;
         }
         User currentUser = SharedPrefManager.getInstance(this).getUser();
@@ -96,7 +102,6 @@ public class Cart extends AppCompatActivity {
                         totalPrice += ci.getCount() * ci.getProduct().getPrice();
                     }
                     binding.totalPrice.setText(totalPrice + " VND");
-                    progress.dismiss();
                 }
             }
 

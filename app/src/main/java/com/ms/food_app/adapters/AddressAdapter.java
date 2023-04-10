@@ -1,6 +1,7 @@
 package com.ms.food_app.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -18,6 +19,8 @@ import com.ms.food_app.databinding.AddressItemBinding;
 import com.ms.food_app.models.Address;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
+import com.ms.food_app.utils.ContextUtil;
+import com.ms.food_app.utils.LoadingUtil;
 
 import java.util.List;
 
@@ -28,15 +31,18 @@ import retrofit2.Response;
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressViewHolder>{
     private Context context;
     private List<Address> addresses;
+    private ProgressDialog progress;
 
     public AddressAdapter(Context context, List<Address> addresses) {
         this.context = context;
         this.addresses = addresses;
+        progress = LoadingUtil.setLoading(context);
     }
     @NonNull
     @Override
     public AddressAdapter.AddressViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         AddressItemBinding binding = AddressItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+
         return new AddressAdapter.AddressViewHolder(binding);
     }
 
@@ -48,12 +54,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         holder.binding.addressItemStreetTvAddress.setText(addressItem.getStreet());
         String txt = addressItem.getWard() + " " + addressItem.getDistrict() + " " + addressItem.getProvince();
         holder.binding.addressItemWDPTvAddress.setText(txt);
-
         holder.binding.addressItemDeleteBtnAddress.setOnClickListener(view -> {
             if(addressItem.getStatus()){
                 showToast("Cannot remove default address");
                 return;
             }
+            progress.show();
             BaseAPIService.createService(IUserService.class).deleteAddressById(addressItem.getId()).enqueue(new Callback<List<Address>>() {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
@@ -61,11 +67,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
                         addresses.remove(holder.getAdapterPosition());
                         notifyItemRemoved(holder.getAdapterPosition());
                     }
+                    progress.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<List<Address>> call, Throwable t) {
                     Log.d("Error", t.getMessage());
+                    progress.dismiss();
                 }
             });
         });

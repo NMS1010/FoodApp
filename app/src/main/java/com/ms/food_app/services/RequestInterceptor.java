@@ -1,10 +1,14 @@
 package com.ms.food_app.services;
 
+import android.content.Intent;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ms.food_app.activities.IntroScreen;
+import com.ms.food_app.activities.Signin;
 import com.ms.food_app.models.requests.RefreshRequest;
 import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.utils.ContextUtil;
@@ -29,8 +33,10 @@ public class RequestInterceptor implements Interceptor {
                     authResponse = refreshToken();
                     if(authResponse != null)
                         SharedPrefManager.getInstance(ContextUtil.context).saveAuthToken(authResponse);
-                    else
+                    else {
                         SharedPrefManager.getInstance(ContextUtil.context).logout();
+                        ContextUtil.context.startActivity(new Intent(ContextUtil.context, IntroScreen.class));
+                    }
                 }
             }
             if(!request.url().url().getPath().contains("refresh") && authResponse != null)

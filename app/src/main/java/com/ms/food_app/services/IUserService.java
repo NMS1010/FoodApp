@@ -22,7 +22,7 @@ public interface IUserService {
     @PUT("users/addresses/{id}")
     Call<List<Address>> deleteAddressById(@Path("id") long id);
     @POST("users/addresses")
-    Call<List<Address>> createAddresses(@Body JsonObject params);
+    Call<List<Address>> uploadAddresses(@Body JsonObject params);
     @Multipart
     @POST("users")
     Call<User> updateProfile(@Query("model") JsonObject params, @Query("file") Multipart file);

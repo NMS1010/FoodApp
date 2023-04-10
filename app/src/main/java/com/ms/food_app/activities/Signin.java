@@ -3,6 +3,7 @@ package com.ms.food_app.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
 import com.ms.food_app.services.IUserService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 import com.ms.food_app.utils.ToastUtil;
 
@@ -28,6 +30,7 @@ import retrofit2.Response;
 
 public class Signin extends AppCompatActivity {
     private ActivitySigninBinding binding;
+    private ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class Signin extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        progress = LoadingUtil.setLoading(this);
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, Main.class));
@@ -70,12 +74,14 @@ public class Signin extends AppCompatActivity {
 
 
         JsonParser parser = new JsonParser();
+        progress.show();
         BaseAPIService.createService(IAuthService.class).login((JsonObject) parser.parse(request)).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
 
                 if(response.body() == null){
                     ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
+                    progress.dismiss();
                     return;
                 }
                 if (!response.body().getAccessToken().equals("")) {
@@ -87,11 +93,13 @@ public class Signin extends AppCompatActivity {
                 }else{
                     ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
                 }
+                progress.dismiss();
             }
 
             @Override
             public void onFailure(@NonNull Call<AuthResponse> call, @NonNull Throwable t) {
                 Log.d("error", t.getMessage());
+                progress.dismiss();
             }
         });
     }
@@ -110,6 +118,7 @@ public class Signin extends AppCompatActivity {
                     finish();
                     Intent intent = new Intent(Signin.this, Main.class);
                     startActivity(intent);
+                    progress.dismiss();
                 }else{
                     ToastUtil.showToast(getApplicationContext(),"Cannot login");
                 }
@@ -118,6 +127,7 @@ public class Signin extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<User> call, Throwable t) {
                 Log.d("error", t.getMessage());
+                progress.dismiss();
             }
         });
     }

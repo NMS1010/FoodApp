@@ -16,39 +16,53 @@
         android:orientation="vertical"
         android:weightSum="5">
 
-        <TextView
-            android:id="@+id/addressItemFullNameTv_address"
-            android:layout_width="296dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="8"
-            android:text="Nguyễn Minh Sơn"
-            android:textColor="@color/fbutton_color_green_sea"
-            android:textSize="20sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/addressItemStreetTv_address"
-            android:layout_width="296dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="8"
-            android:text="Võ Văn Ngân" />
+            <TextView
+                android:id="@+id/addressItemFullNameTv_address"
+                android:layout_width="296dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:text="Nguyễn Minh Sơn"
+                android:textColor="@color/fbutton_color_green_sea"
+                android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/addressItemWDPTv_address"
-            android:layout_width="296dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="8"
-            android:text="Linh Chiểu, Thủ Đức, TP HCM" />
+            <TextView
+                android:id="@+id/addressItemPhoneTv_address"
+                android:layout_width="296dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:text="0354964840" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/addressItemPhoneTv_address"
-            android:layout_width="296dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="8"
-            android:text="0354964840" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/addressItemStreetTv_address"
+                android:layout_width="119dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:text="Võ Văn Ngân" />
+
+            <TextView
+                android:id="@+id/addressItemWDPTv_address"
+                android:layout_width="296dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="8"
+                android:text="Linh Chiểu, Thủ Đức, TP HCM" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
