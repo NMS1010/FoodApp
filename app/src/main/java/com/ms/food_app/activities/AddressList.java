@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.ms.food_app.models.Address;
 import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
+import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 
@@ -30,6 +32,7 @@ public class AddressList extends AppCompatActivity {
     private AddressAdapter adapter;
     private List<Address> addressList;
     private ActivityAddressListBinding binding;
+    private ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,7 @@ public class AddressList extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        progress = LoadingUtil.setLoading(this);
         setAdapter();
         setEvents();
         loadAddress();
@@ -68,6 +72,7 @@ public class AddressList extends AppCompatActivity {
             return;
         }
         User currentUser = SharedPrefManager.getInstance(this).getUser();
+        progress.show();
         BaseAPIService.createService(IUserService.class).getAddressByUserId(currentUser.getId()).enqueue(new Callback<List<Address>>() {
             @Override
             public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
@@ -75,11 +80,13 @@ public class AddressList extends AppCompatActivity {
                     addressList = response.body();
                     adapter.updateAddress(addressList);
                 }
+                progress.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<Address>> call, Throwable t) {
                 Log.d("error", t.getMessage());
+                progress.dismiss();
             }
         });
     }

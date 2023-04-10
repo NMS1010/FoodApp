@@ -28,6 +28,7 @@ import com.ms.food_app.models.Product;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICategoryService;
 import com.ms.food_app.services.IProductService;
+import com.ms.food_app.utils.ContextUtil;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -66,6 +67,7 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        ContextUtil.context = getActivity();
         // Inflate the layout for this fragment
         if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
             startActivity(new Intent(getActivity(), Signin.class));
