@@ -27,22 +27,32 @@ public class RequestInterceptor implements Interceptor {
         Request request = chain.request();
         if(SharedPrefManager.getInstance(ContextUtil.context).isLoggedIn()) {
             AuthResponse authResponse = SharedPrefManager.getInstance(ContextUtil.context).getAuthToken();
-            DecodedJWT decodedJWT = JWT.decode(authResponse.getAccessToken());
-            if(isJWTExpired(decodedJWT) ){
-                if(!request.url().url().getPath().contains("refresh")){
-                    authResponse = refreshToken();
-                    if(authResponse != null)
-                        SharedPrefManager.getInstance(ContextUtil.context).saveAuthToken(authResponse);
-                    else {
-                        SharedPrefManager.getInstance(ContextUtil.context).logout();
-                        ContextUtil.context.startActivity(new Intent(ContextUtil.context, IntroScreen.class));
+            if(authResponse == null){
+                SharedPrefManager.getInstance(ContextUtil.context).logout();
+                Intent intent =new Intent(ContextUtil.context, IntroScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ContextUtil.context.startActivity(intent);
+            }
+            else {
+                DecodedJWT decodedJWT = JWT.decode(authResponse.getAccessToken());
+                if (isJWTExpired(decodedJWT)) {
+                    if (!request.url().url().getPath().contains("refresh")) {
+                        authResponse = refreshToken();
+                        if (authResponse != null)
+                            SharedPrefManager.getInstance(ContextUtil.context).saveAuthToken(authResponse);
+                        else {
+                            SharedPrefManager.getInstance(ContextUtil.context).logout();
+                            Intent intent =new Intent(ContextUtil.context, IntroScreen.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ContextUtil.context.startActivity(intent);
+                        }
                     }
                 }
+                if (!request.url().url().getPath().contains("refresh") && authResponse != null)
+                    request = request.newBuilder().addHeader("Authorization", "Bearer " + authResponse.getAccessToken()).build();
+                else
+                    request = request.newBuilder().removeHeader("Authorization").build();
             }
-            if(!request.url().url().getPath().contains("refresh") && authResponse != null)
-                request = request.newBuilder().addHeader("Authorization", "Bearer " + authResponse.getAccessToken()).build();
-            else
-                request = request.newBuilder().removeHeader("Authorization").build();
         }
         return chain.proceed(request);
     }
@@ -60,7 +70,7 @@ public class RequestInterceptor implements Interceptor {
                 .createService(IAuthService.class)
                 .refreshToken((JsonObject) parser.parse(req))
                 .execute();
-        if(resp != null && resp.isSuccessful()){
+        if(resp.body() != null && resp.isSuccessful()){
             authResponse = resp.body();
             return authResponse;
         }
