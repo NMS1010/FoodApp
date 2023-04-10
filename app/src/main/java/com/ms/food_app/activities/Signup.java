@@ -23,6 +23,7 @@ import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 import org.json.JSONObject;
 
@@ -71,17 +72,17 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                 if(response.body() == null){
-                    showToast("Failed to register account with this information");
+                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
                     return;
                 }
                 AuthResponse authResponse = response.body();
                 if (!authResponse.getAccessToken().equals("")) {
-                    showToast("Registering is successfully");
+                    ToastUtil.showToast(getApplicationContext(),"Registering is successfully");
                     finish();
                     Intent intent = new Intent(Signup.this, Signin.class);
                     startActivity(intent);
                 }else{
-                    showToast("Failed to register account with this information");
+                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
                 }
                 progress.dismiss();
             }
@@ -92,9 +93,6 @@ public class Signup extends AppCompatActivity {
                 progress.dismiss();
             }
         });
-    }
-    private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
     private Boolean isValidated() {
         if (binding.emailEdSignup.getText().toString().trim().isEmpty()) {

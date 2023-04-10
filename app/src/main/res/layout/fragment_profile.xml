@@ -32,17 +32,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11">
 
-
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/imageUser"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            style="@style/circleImage"
-            android:background="@drawable/circle_bg"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:background="@drawable/background_image"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_oval="true" />
 
         <TextView
             android:id="@+id/nameUser"

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,19 +30,38 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivityUpdateProfileBinding;
 import com.ms.food_app.databinding.FragmentProfileBinding;
 import com.ms.food_app.fragments.Home;
 import com.ms.food_app.fragments.Profile;
 import com.ms.food_app.models.User;
+import com.ms.food_app.services.BaseAPIService;
+import com.ms.food_app.services.IUserService;
+import com.ms.food_app.utils.LoadingUtil;
+import com.ms.food_app.utils.RealPathUtil;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UpdateProfile extends AppCompatActivity {
 
@@ -53,6 +73,7 @@ public class UpdateProfile extends AppCompatActivity {
     private int lastSelectedMonth;
     private int lastSelectedDayOfMonth;
     private ArrayAdapter<CharSequence> adapter;
+    private ProgressDialog progress;
     public static  String[] storge_permissions = {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -133,27 +154,39 @@ public class UpdateProfile extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding = ActivityUpdateProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        progress = LoadingUtil.setLoading(this);
         adapter = ArrayAdapter.createFromResource(this, R.array.genderItem, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         binding.genderSpinUpdateProfile.setAdapter(adapter);
         setEvents();
-        loadUser();
         final Calendar c = Calendar.getInstance();
         this.lastSelectedYear = c.get(Calendar.YEAR);
         this.lastSelectedMonth = c.get(Calendar.MONTH);
         this.lastSelectedDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        try {
+            loadUser();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
-    private void loadUser(){
+    private void loadUser() throws ParseException {
         if(!SharedPrefManager.getInstance(this).isLoggedIn()){
-            startActivity(new Intent(this, Signin.class));
+            startActivity(new Intent(this, IntroScreen.class));
         }
         User user = SharedPrefManager.getInstance(this).getUser();
         binding.firstNameTvUpdateProfile.setText(user.getFirstname());
         binding.lastNameTvUpdateProfile.setText(user.getLastname());
         binding.emailTvUpdateProfile.setText(user.getEmail());
         binding.phoneTvUpdateProfile.setText(user.getPhone());
-        binding.birthdayTvUpdateProfile.setText(user.getBirthday());
+        if(user.getBirthday() != null){
+            binding.birthdayTvUpdateProfile.setText(user.getBirthday());
+            Date date =new SimpleDateFormat("yyyy-MM-dd").parse(user.getBirthday());
+            if(date != null) {
+                lastSelectedDayOfMonth = date.getDay();
+                lastSelectedYear = date.getYear();
+                lastSelectedMonth = date.getMonth();
+            }
+        }
         if(!Objects.equals(user.getGender(), "")) {
             int spinnerPosition = adapter.getPosition(user.getGender());
             binding.genderSpinUpdateProfile.setSelection(spinnerPosition);
@@ -164,8 +197,7 @@ public class UpdateProfile extends AppCompatActivity {
     }
     private void selectDate(){
         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
-            binding.birthdayTvUpdateProfile.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-
+            binding.birthdayTvUpdateProfile.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
             lastSelectedYear = year;
             lastSelectedMonth = monthOfYear;
             lastSelectedDayOfMonth = dayOfMonth;
@@ -174,6 +206,83 @@ public class UpdateProfile extends AppCompatActivity {
                 android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
                 dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDayOfMonth);
         datePickerDialog.show();
+    }
+    private Boolean isValidated() {
+        if (binding.emailTvUpdateProfile.getText().toString().trim().isEmpty()) {
+            binding.emailTvUpdateProfile.setError("Enter your email");
+            return false;
+        }
+        if (binding.firstNameTvUpdateProfile.getText().toString().trim().isEmpty()) {
+            binding.firstNameTvUpdateProfile.setError("Enter your first name");
+            return false;
+        }
+        if (binding.lastNameTvUpdateProfile.getText().toString().trim().isEmpty()) {
+            binding.lastNameTvUpdateProfile.setError("Enter your last name");
+            return false;
+        }
+        if (binding.phoneTvUpdateProfile.getText().toString().trim().isEmpty()) {
+            binding.phoneTvUpdateProfile.setError("Enter your phone");
+            return false;
+        }
+        return true;
+    }
+    private void updateUser(){
+
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()){
+            SharedPrefManager.getInstance(this).logout();
+            startActivity(new Intent(this, IntroScreen.class));
+        }
+        User user = SharedPrefManager.getInstance(this).getUser();
+        user.setEmail(binding.emailTvUpdateProfile.getText().toString());
+        user.setPhone(binding.phoneTvUpdateProfile.getText().toString());
+        user.setFirstname(binding.firstNameTvUpdateProfile.getText().toString());
+        user.setLastname(binding.lastNameTvUpdateProfile.getText().toString());
+        user.setGender(binding.genderSpinUpdateProfile.getSelectedItem().toString());
+        user.setBirthday(lastSelectedYear + "-" + (lastSelectedMonth + 1) + "-" + lastSelectedDayOfMonth);
+        MultipartBody.Part avatar = null;
+        if(mUri != null){
+            String IMAGE_PATH = RealPathUtil.getRealPath(this, mUri);
+            File file = new File(IMAGE_PATH);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            avatar = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        }
+        progress.show();
+        String request = new Gson().toJson(user);
+        JsonParser parser = new JsonParser();
+        if(avatar == null){
+            BaseAPIService
+                    .createService(IUserService.class)
+                    .updateProfile((JsonObject)parser.parse(request))
+                    .enqueue(handleUpdate());
+        }else{
+            BaseAPIService
+                    .createService(IUserService.class)
+                    .updateProfile((JsonObject)parser.parse(request), avatar)
+                    .enqueue(handleUpdate());
+        }
+    }
+    private Callback<User> handleUpdate(){
+        return new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    User user = response.body();
+                    SharedPrefManager.getInstance(getApplicationContext()).saveUser(user);
+                    Intent intent = new Intent(getApplicationContext(), Main.class);
+                    intent.putExtra("Check", "Profile");
+                    startActivity(intent);
+                }else{
+                    ToastUtil.showToast(getApplicationContext(), "Failed to update profile");
+                }
+                progress.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                progress.dismiss();
+            }
+        };
     }
     private void setEvents(){
         binding.backBtnUpdateProfile.setOnClickListener(view -> {
@@ -186,6 +295,11 @@ public class UpdateProfile extends AppCompatActivity {
         });
         binding.selectdateUpdateProfile.setOnClickListener(view -> {
             selectDate();
+        });
+        binding.updateBtnUpdateProfile.setOnClickListener(view -> {
+            if(isValidated() ){
+                updateUser();
+            }
         });
     }
 

@@ -49,7 +49,6 @@ public class Cart extends AppCompatActivity {
         progress = LoadingUtil.setLoading(this);
         progress.show();
         loadCart();
-        progress.dismiss();
         setEvents();
     }
     private void setEvents(){
@@ -102,6 +101,7 @@ public class Cart extends AppCompatActivity {
                         totalPrice += ci.getCount() * ci.getProduct().getPrice();
                     }
                     binding.totalPrice.setText(totalPrice + " VND");
+                    progress.dismiss();
                 }
             }
 

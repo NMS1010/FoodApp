@@ -1,5 +1,6 @@
 package com.ms.food_app.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,6 +22,8 @@ import com.ms.food_app.activities.UpdateProfile;
 import com.ms.food_app.databinding.FragmentProfileBinding;
 import com.ms.food_app.models.User;
 import com.ms.food_app.utils.SharedPrefManager;
+
+import java.util.Objects;
 
 public class Profile extends Fragment {
 
@@ -74,12 +77,15 @@ public class Profile extends Fragment {
     }
     private void loadProfile(){
         if(!SharedPrefManager.getInstance(getContext()).isLoggedIn()){
-            startActivity(new Intent(getActivity(), Signin.class));
+            SharedPrefManager.getInstance(getContext()).logout();
+            startActivity(new Intent(getActivity(), IntroScreen.class));
         }
         User user = SharedPrefManager.getInstance(getContext()).getUser();
         binding.nameUser.setText(user.getFirstname() + " " + user.getLastname());
         binding.emailUser.setText(user.getEmail());
-        Glide.with(this)
+        Context ctx = getActivity();
+        if(ctx != null)
+            Glide.with(ctx)
                 .load(user.getAvatar())
                 .into(binding.imageUser);
     }
