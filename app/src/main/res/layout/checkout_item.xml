@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardViewClick"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +11,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/orderItemImgV_orderItem"
+            android:id="@+id/imageFood"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
@@ -22,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/orderItemNameTv_orderItem"
+            android:id="@+id/nameFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -30,12 +29,12 @@
             android:text="Lorem Ipsum"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/orderItemImgV_orderItem"
-            app:layout_constraintTop_toTopOf="@+id/orderItemImgV_orderItem" />
+            app:layout_constraintStart_toEndOf="@+id/imageFood"
+            app:layout_constraintTop_toTopOf="@+id/imageFood" />
 
 
         <TextView
-            android:id="@+id/orderItemQuantityTv_orderItem"
+            android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -55,18 +54,17 @@
             android:text="x"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/orderItemImgV_orderItem"
-            app:layout_constraintEnd_toStartOf="@+id/orderItemQuantityTv_orderItem" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageFood"
+            app:layout_constraintEnd_toStartOf="@+id/count" />
 
         <TextView
-            android:id="@+id/orderItemUnitPriceTv_orderItem"
+            android:id="@+id/priceFood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/metropolis_bold"
             android:text="200.000"
-            android:textColor="@color/primary"
-            app:layout_constraintBottom_toBottomOf="@+id/orderItemImgV_orderItem"
-            app:layout_constraintEnd_toEndOf="@+id/orderItemQuantityTv_orderItem" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageFood"
+            app:layout_constraintEnd_toEndOf="@+id/count" />
 
         <View
             android:id="@+id/view"
@@ -76,33 +74,8 @@
             android:background="?android:attr/dividerVertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/orderItemImgV_orderItem" />
+            app:layout_constraintTop_toBottomOf="@+id/imageFood" />
 
-        <TextView
-            android:id="@+id/tvTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/metropolis_medium"
-            android:text="Total Pesanan :"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toStartOf="@+id/orderItemTotalPriceTv_orderItem"
-            app:layout_constraintHorizontal_bias="0.949"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/view" />
-
-        <TextView
-            android:id="@+id/orderItemTotalPriceTv_orderItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/metropolis_bold"
-            android:text="270.000"
-            android:textColor="@color/primary"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvTotal" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

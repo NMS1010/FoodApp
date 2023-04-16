@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.ms.food_app.R;
 import com.ms.food_app.adapters.CartAdapter;
 import com.ms.food_app.databinding.ActivityCartBinding;
@@ -58,7 +59,10 @@ public class Cart extends AppCompatActivity {
             startActivity(intent);
         });
         binding.Checkout.setOnClickListener(view -> {
-            startActivity(new Intent(this, Checkout.class));
+            Intent intent = new Intent(this, Checkout.class);
+            String req = new Gson().toJson(cart);
+            intent.putExtra("cart", req);
+            startActivity(intent);
         });
         binding.MainButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, Main.class);

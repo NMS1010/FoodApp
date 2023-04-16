@@ -72,6 +72,9 @@ public class AddressDetail extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                     if(response.isSuccessful() && response.body() != null){
+                        User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+                        user.setAddresses(response.body());
+                        SharedPrefManager.getInstance(getApplicationContext()).saveUser(user);
                         finish();
                         startActivity(new Intent(getApplicationContext(), AddressList.class));
                     }
