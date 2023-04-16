@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="INVOICE"
+                android:text="ORDER DETAIL"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -37,9 +37,10 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Invoice ID" />
+                android:text="Order ID" />
 
             <TextView
+                android:id="@+id/orderId"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -60,6 +61,7 @@
                 android:text="Order date" />
 
             <TextView
+                android:id="@+id/orderDate"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -79,6 +81,7 @@
                 android:text="Full name" />
 
             <TextView
+                android:id="@+id/fullName"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -98,14 +101,35 @@
                 android:text="Address" />
 
             <TextView
+                android:id="@+id/address"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="01 VVN" />
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Status" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Đã giao" />
+
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cartRV"
+            android:id="@+id/orderItemRv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -125,6 +149,7 @@
                 android:text="Total Price:" />
 
             <TextView
+                android:id="@+id/totalPrice"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

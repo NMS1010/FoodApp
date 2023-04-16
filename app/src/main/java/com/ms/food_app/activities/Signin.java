@@ -93,7 +93,6 @@ public class Signin extends AppCompatActivity {
                 }else{
                     ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
                 }
-                progress.dismiss();
             }
 
             @Override
