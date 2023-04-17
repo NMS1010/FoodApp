@@ -33,6 +33,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolders holder, int position) {
         Order order = orderList.get(position);
+        holder.binding.nameFood.setText(order.getCreatedAt().toLocaleString());
         holder.binding.foodPrice.setText(order.getAmountFromUser() + " VND");
         holder.binding.itemCount.setText(order.getOrderItems().size() + " items");
         holder.binding.statusReviewTV.setText(order.getStatus());
@@ -41,6 +42,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     .load(order.getOrderItems().get(0).getProduct().getImages().get(0))
                     .into(holder.binding.imageFood);
         holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, OrderDetail.class);
+            intent.putExtra("orderId", order.getId());
+            context.startActivity(intent);
+        });
+        holder.binding.btnReview.setOnClickListener(view -> {
             Intent intent = new Intent(context, OrderDetail.class);
             intent.putExtra("orderId", order.getId());
             context.startActivity(intent);

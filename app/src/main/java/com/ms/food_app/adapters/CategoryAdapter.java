@@ -2,6 +2,7 @@ package com.ms.food_app.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.ms.food_app.R;
+import com.ms.food_app.activities.ProductList;
 import com.ms.food_app.databinding.CategoryItemBinding;
 import com.ms.food_app.databinding.CategoryItemBinding;
 import com.ms.food_app.models.Category;
@@ -40,6 +43,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = categories.get(position);
         Glide.with(context).load(category.getImages()).into(holder.binding.categoryImageImgVHome);
         holder.binding.categoryNameTvHome.setText(category.getName());
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent  =new Intent(context, ProductList.class);
+            intent.putExtra("category", new Gson().toJson(category));
+            context.startActivity(intent);
+        });
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateCategories(ArrayList<Category> categories){

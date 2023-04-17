@@ -8,39 +8,14 @@
     android:background="#EEEEEE"
     tools:context=".fragments.MyOrder">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/transparent"
-        android:elevation="4dp"
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/header_title"
-            style="@style/HeadLineText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Order"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/listOrderRv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,12 +70,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listOrderRv"
-        android:layout_width="410dp"
-        android:layout_height="741dp"
-        android:layout_marginBottom="36dp"
+        android:layout_width="408dp"
+        android:layout_height="703dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

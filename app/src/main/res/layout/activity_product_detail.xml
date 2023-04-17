@@ -210,7 +210,7 @@
         app:layout_constraintStart_toStartOf="@+id/line"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
-    <TextView
+    <WebView
         android:id="@+id/descripDetail"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -11,11 +11,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.ms.food_app.R;
 import com.ms.food_app.adapters.ProductAdapter;
 import com.ms.food_app.databinding.ActivityProductListBinding;
+import com.ms.food_app.models.Category;
 import com.ms.food_app.models.Product;
+import com.ms.food_app.models.response.ProductResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IProductService;
 import com.ms.food_app.utils.LoadingUtil;
@@ -31,8 +36,8 @@ public class ProductList extends AppCompatActivity {
     private int count = 0;
     private final int PAGE_SIZE = 5;
     private int PAGE_INDEX = 0;
-    private ArrayList<Product> allProducts;
-    private ArrayList<Product> currProducts;
+    private List<Product> allProducts;
+    private List<Product> currProducts;
     private ActivityProductListBinding binding;
     private ProductAdapter adapter;
     private ProgressDialog progress;
@@ -40,12 +45,19 @@ public class ProductList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProductListBinding.inflate(getLayoutInflater());
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        allProducts  =new ArrayList<>();
+        allProducts  = new ArrayList<>();
         currProducts = new ArrayList<>();
         progress = LoadingUtil.setLoading(this);
-        fetchData();
-        setData(PAGE_INDEX, PAGE_SIZE);
+
+        String cate = getIntent().getStringExtra("category");
+        if(cate != null && !cate.equals("")){
+            fetchByCategory(new Gson().fromJson(cate, Category.class));
+        }else{
+            fetchAllData();
+        }
         adapter = new ProductAdapter(this, currProducts);
         binding.productRV.setAdapter(adapter);
         binding.productRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -68,27 +80,50 @@ public class ProductList extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void fetchData(){
+    private void fetchAllData(){
         progress.show();
-        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ArrayList<Product>>() {
+        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<Product>> call, Response<ArrayList<Product>> response) {
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    allProducts = response.body();
-                    progress.dismiss();
+                    allProducts = response.body().getProducts();
+                    setData(PAGE_INDEX, PAGE_SIZE);
                 }
+                progress.dismiss();
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Product>> call, Throwable t) {
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("error", t.getMessage());
                 progress.dismiss();
             }
         });
     }
+    private void fetchByCategory(Category category){
+        binding.title.setText(category.getName());
+        progress.show();
+        BaseAPIService.createService(IProductService.class).getAllProducts(category.getId()).enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    currProducts = response.body().getProducts();
+                    adapter.updateProducts(currProducts);
+                }
+                progress.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                progress.dismiss();
+            }
+        });
+    }
     private void setData(int begin, int amount){
-        if(begin + amount > allProducts.size())
+        if(begin + amount > allProducts.size()){
+            adapter.updateProducts(allProducts);
             return;
+        }
         for(int i=begin; i< begin + amount; i++){
             currProducts.add(allProducts.get(i));
         }

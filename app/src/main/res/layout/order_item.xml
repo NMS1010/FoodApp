@@ -71,8 +71,8 @@
 
         <RelativeLayout
             android:id="@+id/statusReviewLayout"
-            android:layout_width="70dp"
-            android:layout_height="20dp"
+            android:layout_width="105dp"
+            android:layout_height="29dp"
             android:layout_marginEnd="9dp"
             android:background="@drawable/bg_edit_text"
             android:backgroundTint="@color/Green">
@@ -106,7 +106,7 @@
 
     <Button
         android:id="@+id/btnReview"
-        android:layout_width="135dp"
+        android:layout_width="91dp"
         android:layout_height="37dp"
         android:layout_marginEnd="11dp"
         android:backgroundTint="#43A047"

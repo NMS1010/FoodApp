@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -62,32 +63,32 @@ public class ProductDetail extends AppCompatActivity {
             this.startActivity(new Intent(this, IntroScreen.class));
             return;
         }
-        progress.show();
-        User user = SharedPrefManager.getInstance(this).getUser();
-        BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onResponse(Call<Save> call, Response<Save> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    binding.fav.setBackgroundColor(R.color.White);
-                    for (Product p: response.body().getProducts()) {
-                        if(p.getId() == product.getId()){
-                            binding.fav.setBackgroundColor(R.color.bgRowBackground);
-                            break;
-                        }
-                    }
-                }
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Save> call, Throwable t) {
-                Log.d("Error", t.getMessage());
-                progress.dismiss();
-            }
-        });
+//        progress.show();
+//        User user = SharedPrefManager.getInstance(this).getUser();
+//        BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
+//            @SuppressLint("ResourceAsColor")
+//            @Override
+//            public void onResponse(Call<Save> call, Response<Save> response) {
+//                if(response.isSuccessful() && response.body() != null){
+//                    binding.fav.setBackgroundColor(R.color.White);
+//                    for (Product p: response.body().getProducts()) {
+//                        if(p.getId() == product.getId()){
+////                            binding.fav.setBackgroundColor(R.color.bgRowBackground);
+//                            break;
+//                        }
+//                    }
+//                }
+//                progress.dismiss();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Save> call, Throwable t) {
+//                Log.d("Error", t.getMessage());
+//                progress.dismiss();
+//            }
+//        });
         binding.nameDetail.setText(product.getName());
-        binding.descripDetail.setText(product.getDescription());
+        binding.descripDetail.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
         binding.priceDetail.setText(product.getPrice() + " VND");
         Glide.with(getApplicationContext())
                 .load(product.getImages().get(0))
@@ -100,7 +101,9 @@ public class ProductDetail extends AppCompatActivity {
             startActivity(intent);
         });
         binding.review.setOnClickListener(view -> {
-            startActivity(new Intent(this, CustomerReview.class));
+            Intent intent = new Intent(this, CustomerReview.class);
+            intent.putExtra("product", new Gson().toJson(product));
+            startActivity(intent);
         });
         binding.cart.setOnClickListener(view -> {
             startActivity(new Intent(this, Cart.class));

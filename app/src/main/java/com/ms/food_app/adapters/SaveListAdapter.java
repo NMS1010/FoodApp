@@ -79,6 +79,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
             @Override
             public void onResponse(Call<Save> call, Response<Save> response) {
                 if(response.isSuccessful() && response.body() != null){
+                    products.remove(position);
                     notifyItemRemoved(position);
                     progress.dismiss();
                 }
