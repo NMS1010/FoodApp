@@ -26,10 +26,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/title"
             style="@style/HeadLineText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Foods"
+            android:text="All Foods"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,24 +50,19 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/idNestedSV"
-        android:layout_width="409dp"
-        android:layout_height="790dp"
+        android:layout_width="411dp"
+        android:layout_height="666dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        tools:context=".MainActivity">
+        tools:context=".activities.ProductList">
 
-        <!--linear layout for displaying
-            our recycler view-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--recycler view for displaying our list of data
-                and we are making nested scroll for our
-                recycler view as false-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productRV"
                 android:layout_width="match_parent"
@@ -74,12 +70,11 @@
                 android:layout_weight="1"
                 android:nestedScrollingEnabled="false" />
 
-            <!--we are adding progress bar
-                for the purpose of loading-->
             <ProgressBar
                 android:id="@+id/productLoading"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

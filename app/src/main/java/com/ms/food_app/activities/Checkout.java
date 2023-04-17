@@ -153,7 +153,6 @@ public class Checkout extends AppCompatActivity {
             order.setUser(user);
             order.setAmountFromUser(totalPrice + chosenDelivery.getPrice());
             order.setPhone(selectedAddress.getPhone());
-            order.setStatus("0");
             List<OrderItem> orderItems = new ArrayList<>();
             cart.getCartItems().forEach(ci -> {
                 OrderItem oi = new OrderItem();

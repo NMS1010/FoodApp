@@ -32,9 +32,9 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     @Override
     public void onBindViewHolder(@NonNull OrderDetailViewHolders holder, int position) {
         OrderItem orderItem = orderItems.get(position);
-        holder.binding.orderItemNameTvOrderItem.setText(orderItem.getProduct().getName() + " VND");
+        holder.binding.orderItemNameTvOrderItem.setText(orderItem.getProduct().getName());
         holder.binding.orderItemQuantityTvOrderItem.setText(String.valueOf(orderItem.getCount()));
-        holder.binding.orderItemUnitPriceTvOrderItem.setText(String.valueOf(orderItem.getProduct().getPrice()));
+        holder.binding.orderItemUnitPriceTvOrderItem.setText(String.valueOf(orderItem.getProduct().getPrice()) + " VND");
         holder.binding.orderItemTotalPriceTvOrderItem.setText(orderItem.getCount() * orderItem.getProduct().getPrice() + " VND");
         Glide.with(context)
                 .load(orderItem.getProduct().getImages().get(0))

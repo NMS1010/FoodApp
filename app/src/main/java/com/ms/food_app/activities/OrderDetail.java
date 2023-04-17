@@ -70,6 +70,7 @@ public class OrderDetail extends AppCompatActivity {
                     Order order = response.body();
                     orderItemList = response.body().getOrderItems();
                     adapter.updateOrderDetails(orderItemList);
+                    binding.orderId.setText("#" + order.getId());
                     binding.fullName.setText(order.getUser().getFirstname() + " " + order.getUser().getLastname());
                     binding.orderDate.setText(order.getCreatedAt().toLocaleString());
                     binding.status.setText(order.getStatus());

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.ms.food_app.R;
 import com.ms.food_app.activities.Cart;
+import com.ms.food_app.activities.ProductList;
 import com.ms.food_app.activities.Search;
 import com.ms.food_app.activities.Signin;
 import com.ms.food_app.adapters.CategoryAdapter;
@@ -25,6 +26,7 @@ import com.ms.food_app.adapters.SliderAdapter;
 import com.ms.food_app.databinding.FragmentHomeBinding;
 import com.ms.food_app.models.Category;
 import com.ms.food_app.models.Product;
+import com.ms.food_app.models.response.ProductResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.ICategoryService;
 import com.ms.food_app.services.IProductService;
@@ -118,6 +120,9 @@ public class Home extends Fragment {
         binding.searchView.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), Search.class));
         });
+        binding.foodMenu.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), ProductList.class));
+        });
     }
     private void LoadCategories(){
         BaseAPIService.createService(ICategoryService.class).getAllCategories().enqueue(new Callback<ArrayList<Category>>() {
@@ -135,18 +140,19 @@ public class Home extends Fragment {
         });
     }
     private void LoadProducts(){
-        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ArrayList<Product>>() {
+        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ProductResponse>() {
             @Override
-            public void onResponse(Call<ArrayList<Product>> call, Response<ArrayList<Product>> response) {
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    productAdapter.updateProducts(response.body());
+                    productAdapter.updateProducts(response.body().getProducts());
                     progress.dismiss();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Product>> call, Throwable t) {
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("error", t.getMessage());
+                progress.dismiss();
             }
         });
     }
