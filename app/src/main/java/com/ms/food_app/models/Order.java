@@ -21,6 +21,8 @@ public class Order implements Serializable {
     private Delivery delivery;
 
     private List<OrderItem> orderItems;
+
+
     private Date createdAt;
 
     public Date getCreatedAt() {

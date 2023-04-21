@@ -35,6 +35,7 @@ public class OrderDetail extends AppCompatActivity {
     private List<OrderItem> orderItemList;
     private ProgressDialog progressDialog;
     private long orderId;
+    private Order order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +68,9 @@ public class OrderDetail extends AppCompatActivity {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    Order order = response.body();
+                    order = response.body();
                     orderItemList = response.body().getOrderItems();
-                    adapter.updateOrderDetails(orderItemList);
+                    adapter.updateOrderDetails(orderItemList, order);
                     binding.orderId.setText("#" + order.getId());
                     binding.fullName.setText(order.getUser().getFirstname() + " " + order.getUser().getLastname());
                     binding.orderDate.setText(order.getCreatedAt().toLocaleString());
@@ -94,6 +95,7 @@ public class OrderDetail extends AppCompatActivity {
             intent.putExtra("Check", "Order");
             startActivity(intent);
         });
+
     }
     private void setAdapter(){
         if(orderItemList == null)

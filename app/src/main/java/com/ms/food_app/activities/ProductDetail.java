@@ -63,30 +63,30 @@ public class ProductDetail extends AppCompatActivity {
             this.startActivity(new Intent(this, IntroScreen.class));
             return;
         }
-//        progress.show();
-//        User user = SharedPrefManager.getInstance(this).getUser();
-//        BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
-//            @SuppressLint("ResourceAsColor")
-//            @Override
-//            public void onResponse(Call<Save> call, Response<Save> response) {
-//                if(response.isSuccessful() && response.body() != null){
-//                    binding.fav.setBackgroundColor(R.color.White);
-//                    for (Product p: response.body().getProducts()) {
-//                        if(p.getId() == product.getId()){
-////                            binding.fav.setBackgroundColor(R.color.bgRowBackground);
-//                            break;
-//                        }
-//                    }
-//                }
-//                progress.dismiss();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Save> call, Throwable t) {
-//                Log.d("Error", t.getMessage());
-//                progress.dismiss();
-//            }
-//        });
+        progress.show();
+        User user = SharedPrefManager.getInstance(this).getUser();
+        BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onResponse(Call<Save> call, Response<Save> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    binding.fav.setBackgroundColor(R.color.White);
+                    for (Product p: response.body().getProducts()) {
+                        if(p.getId() == product.getId()){
+                            binding.fav.setSelected(true);
+                            break;
+                        }
+                    }
+                }
+                progress.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<Save> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+                progress.dismiss();
+            }
+        });
         binding.nameDetail.setText(product.getName());
         binding.descripDetail.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
         binding.priceDetail.setText(product.getPrice() + " VND");
@@ -116,8 +116,9 @@ public class ProductDetail extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Save> call, Response<Save> response) {
                     if(response.isSuccessful() && response.body() != null){
-                        binding.fav.setBackgroundColor(R.color.bgRowBackground);
-                        ToastUtil.showToast(getApplicationContext(), "Succeed in adding product to your save list");
+                        if(!binding.fav.isSelected())
+                            ToastUtil.showToast(getApplicationContext(), "Succeed in adding product to your save list");
+                        binding.fav.setSelected(true);
                     }else{
                         ToastUtil.showToast(getApplicationContext(), "Failed to add product to your save list");
                     }

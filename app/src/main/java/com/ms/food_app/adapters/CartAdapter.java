@@ -61,6 +61,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.binding.nameFood.setText(cartItem.getProduct().getName());
         holder.binding.priceFood.setText(String.valueOf(cartItem.getProduct().getPrice()));
         holder.binding.count.setText(String.valueOf(cartItem.getCount()));
+        holder.binding.rateReview.setText(String.valueOf(cartItem.getProduct().getRating()));
+        holder.binding.countSold.setText(cartItem.getProduct().getSold() + " orders");
         holder.binding.delete.setOnClickListener(view -> {
             removeCartItem(cartItem, position);
         });
