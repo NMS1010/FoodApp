@@ -69,6 +69,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             intent.putExtra("product", new Gson().toJson(product));
             context.startActivity(intent);
         });
+        holder.binding.countSold.setText(product.getSold() + " orders");
+        holder.binding.rateReview.setText(String.valueOf(product.getRating()));
         holder.binding.favoriteFood.setOnClickListener(view -> {
             User user = SharedPrefManager.getInstance(context).getUser();
             progress.show();

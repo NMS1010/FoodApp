@@ -16,8 +16,26 @@ public class Product  implements Serializable {
     private int quantity;
 
     private long category;
+    private int sold;
+    private  int rating;
 
     private List<String> images;
+
+    public int getSold() {
+        return sold;
+    }
+
+    public void setSold(int sold) {
+        this.sold = sold;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
     public long getId() {
         return id;

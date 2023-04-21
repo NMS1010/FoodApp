@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -56,8 +57,11 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
         Glide.with(context).load(product.getImages().get(0)).into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
         holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
+        holder.binding.rateReview.setText(String.valueOf(product.getRating()));
+        holder.binding.countReview.setText(product.getSold() + " orders");
+        holder.binding.favoriteFood.setSelected(true);
         holder.binding.favoriteFood.setOnClickListener(view -> {
-            removeSaveItem(product, position);
+            removeSaveItem(holder.binding.favoriteFood,product, position);
         });
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetail.class);
@@ -65,7 +69,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
             context.startActivity(intent);
         });
     }
-    private void removeSaveItem(Product product, int position){
+    private void removeSaveItem(View view, Product product, int position){
 
         if(!SharedPrefManager.getInstance(context).isLoggedIn()){
             SharedPrefManager.getInstance(context).logout();
@@ -79,6 +83,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
             @Override
             public void onResponse(Call<Save> call, Response<Save> response) {
                 if(response.isSuccessful() && response.body() != null){
+                    view.setSelected(false);
                     products.remove(position);
                     notifyItemRemoved(position);
                     progress.dismiss();
