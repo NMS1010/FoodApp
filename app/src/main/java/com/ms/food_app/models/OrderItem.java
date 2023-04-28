@@ -6,6 +6,16 @@ public class OrderItem {
     private int count;
     private Product product;
 
+    private boolean rating;
+
+    public boolean getRating() {
+        return rating;
+    }
+
+    public void setRating(boolean rating) {
+        this.rating = rating;
+    }
+
     public long getId() {
         return id;
     }

@@ -21,6 +21,8 @@ public interface IOrderService {
 
     @GET("order/user")
     Call<List<Order>> getOrderByStatus(@Query("userId") long userId, @Query("status") String status);
+    @GET("admin/order")
+    Call<List<Order>> getAllOrderByStatus(@Query("status") String status);
 
     @GET("order/user/{userId}")
     Call<List<Order>> getOrderByUser(@Path("userId") long userId);

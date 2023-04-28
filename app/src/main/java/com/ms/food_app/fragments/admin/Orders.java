@@ -1,9 +1,8 @@
-package com.ms.food_app.fragments;
+package com.ms.food_app.fragments.admin;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,14 +17,9 @@ import android.widget.Button;
 
 import com.ms.food_app.R;
 import com.ms.food_app.activities.IntroScreen;
-import com.ms.food_app.activities.Signin;
 import com.ms.food_app.adapters.OrderAdapter;
-import com.ms.food_app.databinding.FragmentHomeBinding;
 import com.ms.food_app.databinding.FragmentMyOrderBinding;
-import com.ms.food_app.databinding.FragmentOrdersBinding;
-import com.ms.food_app.databinding.FragmentProfileBinding;
 import com.ms.food_app.models.Order;
-import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IOrderService;
 import com.ms.food_app.utils.Constants;
@@ -39,18 +33,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyOrder extends Fragment {
+public class Orders extends Fragment {
 
-    private FragmentOrdersBinding binding;
+    private FragmentMyOrderBinding binding;
     private ProgressDialog progress;
     private List<Order> orderList;
     private OrderAdapter orderAdapter;
-    public MyOrder() {
+    public Orders() {
         // Required empty public constructor
     }
 
-    public static MyOrder newInstance(String param1, String param2) {
-        MyOrder fragment = new MyOrder();
+    public static Orders newInstance(String param1, String param2) {
+        Orders fragment = new Orders();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -66,15 +60,14 @@ public class MyOrder extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
-            SharedPrefManager.getInstance(getActivity()).logout();
             startActivity(new Intent(getActivity(), IntroScreen.class));
         }
-        binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        binding = FragmentMyOrderBinding.inflate(inflater, container, false);
         progress = LoadingUtil.setLoading(getActivity());
+        binding.pendingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
         setAdapter();
         loadOrderByStatus(Constants.NOT_PROCESSED);
         setEvents();
-        setChosenBackground(binding.pendingBtnOrderList);
         return binding.getRoot();
     }
     private void setEvents(){
@@ -105,25 +98,22 @@ public class MyOrder extends Fragment {
         });
     }
     private void resetBackground(){
-        binding.pendingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
+        binding.pendingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
 
-        binding.canceledBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
+        binding.canceledBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
 
-        binding.completedBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
+        binding.completedBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
 
-        binding.processingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
+        binding.processingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
 
-        binding.shippingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
+        binding.shippingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
     }
-
     private void setChosenBackground(Button button){
-//        button.setBackgroundColor(R.color.white);
-        button.setTextColor(this.getResources().getColor(R.color.blue2));
+        button.setTextColor(getResources().getColor(R.color.blue2));
     }
     private void loadOrderByStatus(String status){
-        User user = SharedPrefManager.getInstance(getActivity()).getUser();
         progress.show();
-        BaseAPIService.createService(IOrderService.class).getOrderByStatus(user.getId(), status).enqueue(new Callback<List<Order>>() {
+        BaseAPIService.createService(IOrderService.class).getAllOrderByStatus(status).enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if(response.isSuccessful() && response.body() != null){

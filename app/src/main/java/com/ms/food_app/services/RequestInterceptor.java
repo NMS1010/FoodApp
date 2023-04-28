@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ms.food_app.activities.IntroScreen;
 import com.ms.food_app.activities.Signin;
+import com.ms.food_app.models.User;
 import com.ms.food_app.models.requests.RefreshRequest;
 import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.utils.ContextUtil;
@@ -27,11 +28,8 @@ public class RequestInterceptor implements Interceptor {
         Request request = chain.request();
         if(SharedPrefManager.getInstance(ContextUtil.context).isLoggedIn()) {
             AuthResponse authResponse = SharedPrefManager.getInstance(ContextUtil.context).getAuthToken();
-            if(authResponse == null){
-                SharedPrefManager.getInstance(ContextUtil.context).logout();
-                Intent intent =new Intent(ContextUtil.context, IntroScreen.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ContextUtil.context.startActivity(intent);
+            if(authResponse == null || authResponse.getAccessToken() == null || authResponse.getRefreshToken() == null){
+                logout();
             }
             else {
                 DecodedJWT decodedJWT = JWT.decode(authResponse.getAccessToken());
@@ -41,10 +39,7 @@ public class RequestInterceptor implements Interceptor {
                         if (authResponse != null)
                             SharedPrefManager.getInstance(ContextUtil.context).saveAuthToken(authResponse);
                         else {
-                            SharedPrefManager.getInstance(ContextUtil.context).logout();
-                            Intent intent =new Intent(ContextUtil.context, IntroScreen.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            ContextUtil.context.startActivity(intent);
+                            logout();
                         }
                     }
                 }
@@ -56,14 +51,22 @@ public class RequestInterceptor implements Interceptor {
         }
         return chain.proceed(request);
     }
+    void logout(){
+        SharedPrefManager.getInstance(ContextUtil.context).logout();
+        Intent intent =new Intent(ContextUtil.context, IntroScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ContextUtil.context.startActivity(intent);
+    }
     boolean isJWTExpired(DecodedJWT decodedJWT) {
         Date expiresAt = decodedJWT.getExpiresAt();
         return expiresAt.before(new Date());
     }
     private AuthResponse refreshToken() throws IOException {
         AuthResponse authResponse = SharedPrefManager.getInstance(ContextUtil.context).getAuthToken();
+        User user = SharedPrefManager.getInstance(ContextUtil.context).getUser();
         RefreshRequest refreshRequest = new RefreshRequest();
         refreshRequest.setTokenRefresh(authResponse.getRefreshToken());
+        refreshRequest.setUserId(user.getId());
         String req = new Gson().toJson(refreshRequest);
         JsonParser parser = new JsonParser();
         retrofit2.Response<AuthResponse> resp = BaseAPIService

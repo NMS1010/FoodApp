@@ -3,6 +3,7 @@ package com.ms.food_app.fragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -45,13 +46,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Home extends Fragment {
+    final int MAX_PRODUCT = 5;
     private FragmentHomeBinding binding;
     private ArrayList<Category> categories;
     private CategoryAdapter categoryAdapter;
     private ArrayList<Product> products;
     private ProductAdapter productAdapter;
     private SliderAdapter sliderAdapter;
-    private List<Integer> images;
+    private List<String> images;
     private ProgressDialog progress;
     public Home() {
         // Required empty public constructor
@@ -82,14 +84,17 @@ public class Home extends Fragment {
         LoadProducts();
         return binding.getRoot();
     }
+    private String getPath(int resId){
+        return "android.resource://" + getActivity().getPackageName() + "/" + resId;
+    }
     private void setAdapter(){
         categories = new ArrayList<>();
         products = new ArrayList<>();
-        images = new ArrayList<Integer>(){
+        images = new ArrayList<String>(){
             {
-                add(R.drawable.img1);
-                add(R.drawable.img2);
-                add(R.drawable.img3);
+                add(getPath(R.drawable.img1));
+                add(getPath(R.drawable.img2));
+                add(getPath(R.drawable.img3));
             }
         };
 
@@ -102,7 +107,7 @@ public class Home extends Fragment {
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
         binding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
-        binding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
+        binding.imageSlider.setIndicatorUnselectedColor(Color.BLACK);
         binding.imageSlider.setScrollTimeInSec(4);
         binding.imageSlider.setAutoCycle(true);
         binding.imageSlider.startAutoCycle();
@@ -129,7 +134,8 @@ public class Home extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<Category>> call, Response<ArrayList<Category>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    categoryAdapter.updateCategories(response.body());
+                    categories = response.body();
+                    categoryAdapter.updateCategories(categories);
                 }
             }
 
@@ -144,7 +150,11 @@ public class Home extends Fragment {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    productAdapter.updateProducts(response.body().getProducts());
+
+                    products = new ArrayList<>(response.body().getProducts());
+                    if(products.size() > MAX_PRODUCT)
+                        products = new ArrayList<>(products.subList(0, MAX_PRODUCT - 1));
+                    productAdapter.updateProducts(products);
                     progress.dismiss();
                 }
             }

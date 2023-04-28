@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order Status"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"/>
+
+    <RadioGroup
+        android:id="@+id/statusRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/pendingRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pending"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:buttonTint="@color/teal"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/processingRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Processing"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:buttonTint="@color/teal"/>
+
+        <RadioButton
+            android:id="@+id/shippedRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Shipping"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:buttonTint="@color/teal"/>
+
+        <RadioButton
+            android:id="@+id/deliveredRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delivered"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:buttonTint="@color/teal"/>
+
+        <RadioButton
+            android:id="@+id/cancelledRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelled"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:padding="16dp"
+            android:buttonTint="@color/teal"/>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/main_button"
+        android:layout_marginTop="32dp"/>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/main_button"
+        android:layout_marginTop="32dp"/>
+
+</LinearLayout>

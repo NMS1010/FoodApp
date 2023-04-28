@@ -3,14 +3,19 @@ package com.ms.food_app.models;
 import java.util.Date;
 
 public class Review {
-    private long id;
+    private Long id;
     private String content;
 
     private int rating;
+    private UserReviewDto user;
 
-    private String firstName;
-    private String lastName;
-    private String avatar;
+    public UserReviewDto getUserReviewDto() {
+        return user;
+    }
+
+    public void setUserReviewDto(UserReviewDto user) {
+        this.user = user;
+    }
 
     private long orderId;
 
@@ -23,39 +28,15 @@ public class Review {
         return createdAt;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -92,7 +73,7 @@ public class Review {
         this.productId = productId;
     }
 
-    public boolean isApproved() {
+    public boolean getApproved() {
         return approved;
     }
 

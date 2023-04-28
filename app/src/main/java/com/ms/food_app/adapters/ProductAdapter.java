@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -61,7 +62,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        Glide.with(context).load(product.getImages().get(0)).into(holder.binding.imageFood);
+//        progress.show();
+        Glide.with(context)
+                .load(product.getImages().get(0))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .override(200,200)
+                .centerCrop()
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        progress.dismiss();
+                        return false;
+                    }
+                })
+                .into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
         holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
         holder.itemView.setOnClickListener(view -> {
@@ -69,7 +88,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             intent.putExtra("product", new Gson().toJson(product));
             context.startActivity(intent);
         });
-        holder.binding.countSold.setText(product.getSold() + " orders");
+        holder.binding.countSold.setText(product.getSold() + " sold");
         holder.binding.rateReview.setText(String.valueOf(product.getRating()));
         holder.binding.favoriteFood.setOnClickListener(view -> {
             User user = SharedPrefManager.getInstance(context).getUser();

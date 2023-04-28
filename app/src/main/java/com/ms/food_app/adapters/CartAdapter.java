@@ -40,11 +40,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private List<CartItem> cartItems;
     private Consumer<Double> updateTotalPrice;
     private ProgressDialog progress;
-
-    public CartAdapter(Context context, List<CartItem> cartItems,  Consumer<Double> updateTotalPrice) {
+    private Consumer<Integer> emptyCart;
+    public CartAdapter(Context context, List<CartItem> cartItems,  Consumer<Double> updateTotalPrice, Consumer<Integer> emptyCart) {
         this.context = context;
         this.cartItems = cartItems;
         this.updateTotalPrice = updateTotalPrice;
+        this.emptyCart = emptyCart;
         progress = LoadingUtil.setLoading(context);
     }
     @NonNull
@@ -67,7 +68,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             removeCartItem(cartItem, position);
         });
         holder.binding.plus.setOnClickListener(view -> {
-            increaseCartItem(cartItem, position, cartItem.getCount() + 1);
+            increaseCartItem(cartItem, position, cartItem.getCount());
         });
         holder.binding.minus.setOnClickListener(view -> {
             int amount = cartItem.getCount() - 1;
@@ -82,7 +83,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private void increaseCartItem(CartItem cartItem, int position, int count){
         progress.show();
         User currUser = SharedPrefManager.getInstance(context).getUser();
-        cartItem.setCount(count);
+        cartItem.setCount(1);
         cartItem.setCartId(currUser.getCartId());
         String request = new Gson().toJson(cartItem);
         JsonParser parser = new JsonParser();
@@ -93,15 +94,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    cartItem.setCount(count);
+                    cartItem.setCount(count + 1);
                     notifyItemChanged(position);
                     double totalPrice = 0;
                     for (CartItem ci: response.body().getCartItems()) {
                         totalPrice += (ci.getProduct().getPrice() * ci.getCount());
                     }
                     updateTotalPrice.accept(totalPrice);
-                    progress.dismiss();
                 }
+                progress.dismiss();
             }
 
             @Override
@@ -143,6 +144,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 if(response.isSuccessful() && response.body() != null){
                     cartItems.remove(cartItem);
                     notifyItemRemoved(position);
+                    if(cartItems.size() == 0){
+                        emptyCart.accept(View.VISIBLE);
+                    }
                     double totalPrice = 0;
                     for (CartItem ci: response.body().getCartItems()) {
                         totalPrice += (ci.getProduct().getPrice() * ci.getCount());

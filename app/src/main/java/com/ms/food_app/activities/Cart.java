@@ -1,5 +1,7 @@
 package com.ms.food_app.activities;
 
+import static android.view.View.VISIBLE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,12 +73,13 @@ public class Cart extends AppCompatActivity {
         });
     }
     private void setAdapter(){
+        Consumer<Integer> emptyCart = (Integer i) -> binding.noItem.setVisibility(i);
         if(cart == null)
             cart = new com.ms.food_app.models.Cart(new ArrayList<>());
         Consumer<Double> updateTotalPrice = totalPrice -> {
             binding.totalPrice.setText(totalPrice + " VND");
         };
-        adapter = new CartAdapter(this, cart.getCartItems(), updateTotalPrice);
+        adapter = new CartAdapter(this, cart.getCartItems(), updateTotalPrice, emptyCart);
         binding.cartRV.setAdapter(adapter);
         binding.cartRV.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
     }
@@ -94,7 +97,7 @@ public class Cart extends AppCompatActivity {
                 if(response.isSuccessful() && response.body() != null) {
                     cart = response.body();
                     if(cart.getCartItems().size() == 0){
-                        binding.noItem.setVisibility(View.VISIBLE);
+                        binding.noItem.setVisibility(VISIBLE);
                     }
                     else{
                         binding.noItem.setVisibility(View.GONE);

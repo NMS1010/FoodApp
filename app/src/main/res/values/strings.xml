@@ -21,11 +21,11 @@
     <string name="change_password">CHANGE PASSWORD</string>
     <string name="back">BACK</string>
     <string name="sign_in_lower">Sign In</string>
-    <string name="not_processed">Chờ xử lý</string>
-    <string name="processing">Chờ lấy hàng</string>
-    <string name="shipped">Đang giao</string>
-    <string name="delivered">Đã giao</string>
-    <string name="cancelled">Đã hủy</string>
+    <string name="not_processed">NOT PROCESS</string>
+    <string name="processing">PROCESSING</string>
+    <string name="shipped">SHIPPING</string>
+    <string name="delivered">DELIVERED</string>
+    <string name="cancelled">CANCELED</string>
     <string name="home">Home</string>
     <string name="order">My Order</string>
     <string name="user">Profile</string>

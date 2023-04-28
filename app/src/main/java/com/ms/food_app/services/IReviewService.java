@@ -15,11 +15,11 @@ import retrofit2.http.Path;
 
 public interface IReviewService {
 
-    @GET("/review/product/{id}")
+    @GET("review/product/{id}")
     Call<List<Review>> getReviewByProduct(@Path("id") long id);
-    @GET("/review/user/{id}")
+    @GET("review/user/{id}")
     Call<List<Review>> getReviewByUser(@Path("id") long id);
 
-    @POST("/review")
+    @POST("review")
     Call<Review> createReview(@Body JsonObject review);
 }
