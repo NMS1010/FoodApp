@@ -26,7 +26,6 @@
         android:layout_width="70dp"
         android:layout_height="37dp"
         android:layout_marginLeft="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_16sdp"
         android:text="Category"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"

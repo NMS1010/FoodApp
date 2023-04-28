@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ms.food_app.R;
+import com.ms.food_app.adapters.SliderAdapter;
 import com.ms.food_app.databinding.ActivityProductDetailBinding;
 import com.ms.food_app.models.CartItem;
 import com.ms.food_app.models.Product;
@@ -28,6 +30,12 @@ import com.ms.food_app.services.ISaveService;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 import com.ms.food_app.utils.ToastUtil;
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +45,8 @@ public class ProductDetail extends AppCompatActivity {
     private ActivityProductDetailBinding binding;
     private ProgressDialog progress;
     private Product product;
+    private List<String> images;
+    private SliderAdapter sliderAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +73,10 @@ public class ProductDetail extends AppCompatActivity {
             this.startActivity(new Intent(this, IntroScreen.class));
             return;
         }
+
+        images = new ArrayList<>();
+        product.getImages().forEach(x -> images.add(x));
+        sliderAdapter = new SliderAdapter(this, images);
         progress.show();
         User user = SharedPrefManager.getInstance(this).getUser();
         BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
@@ -70,7 +84,7 @@ public class ProductDetail extends AppCompatActivity {
             @Override
             public void onResponse(Call<Save> call, Response<Save> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    binding.fav.setBackgroundColor(R.color.White);
+                    binding.fav.setSelected(false);
                     for (Product p: response.body().getProducts()) {
                         if(p.getId() == product.getId()){
                             binding.fav.setSelected(true);
@@ -90,9 +104,18 @@ public class ProductDetail extends AppCompatActivity {
         binding.nameDetail.setText(product.getName());
         binding.descripDetail.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
         binding.priceDetail.setText(product.getPrice() + " VND");
-        Glide.with(getApplicationContext())
-                .load(product.getImages().get(0))
-                .into(binding.imageDetail);
+        binding.countOrder.setText(product.getSold() + " sold");
+        binding.rateReview.setText(String.valueOf(product.getRating()));
+
+        binding.imageSlider.setSliderAdapter(sliderAdapter);
+        binding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM);
+        binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+        binding.imageSlider.setIndicatorSelectedColor(Color.WHITE);
+        binding.imageSlider.setIndicatorUnselectedColor(Color.BLACK);
+        binding.imageSlider.setScrollTimeInSec(4);
+        binding.imageSlider.setAutoCycle(true);
+        binding.imageSlider.startAutoCycle();
     }
     private void setEvents(){
         binding.back.setOnClickListener(view -> {

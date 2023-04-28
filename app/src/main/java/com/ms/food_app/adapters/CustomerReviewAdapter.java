@@ -36,9 +36,9 @@ public class CustomerReviewAdapter extends RecyclerView.Adapter<CustomerReviewAd
     @Override
     public void onBindViewHolder(@NonNull CustomerReviewAdapter.ReviewViewHolder holder, int position) {
         Review review = reviews.get(position);
-        Glide.with(context).load(review.getAvatar()).into(holder.binding.imageUser);
-        holder.binding.nameUser.setText(review.getFirstName() + " " + review.getLastName());
-        holder.binding.reviewRate.setText(review.getRating() + "out of 5.0");
+        Glide.with(context).load(review.getUserReviewDto().getAvatar()).into(holder.binding.imageUser);
+        holder.binding.nameUser.setText(review.getUserReviewDto().getFirstname() + " " + review.getUserReviewDto().getLastname());
+        holder.binding.reviewRate.setText(review.getRating() + " out of 5.0");
         holder.binding.reviewComment.setText(review.getContent());
         holder.binding.reviewDate.setText(review.getCreatedAt().toLocaleString());
     }

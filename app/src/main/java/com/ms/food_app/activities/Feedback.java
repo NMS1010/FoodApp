@@ -1,11 +1,15 @@
 package com.ms.food_app.activities;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -16,6 +20,7 @@ import com.ms.food_app.databinding.ActivityFeedbackBinding;
 import com.ms.food_app.models.Product;
 import com.ms.food_app.models.Review;
 import com.ms.food_app.models.User;
+import com.ms.food_app.models.UserReviewDto;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IReviewService;
 import com.ms.food_app.utils.LoadingUtil;
@@ -40,6 +45,8 @@ public class Feedback extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityFeedbackBinding.inflate(getLayoutInflater());
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         product = new Gson().fromJson(intent.getStringExtra("product"), Product.class);
@@ -76,6 +83,8 @@ public class Feedback extends AppCompatActivity {
         binding.backBtn.setOnClickListener(view -> {
             Intent i = new Intent(this, OrderDetail.class);
             i.putExtra("orderId", orderId);
+            if(rv != null)
+                i = new Intent(this, MyReview.class);
             startActivity(i);
         });
         binding.Submit.setOnClickListener(view -> {
@@ -98,9 +107,13 @@ public class Feedback extends AppCompatActivity {
             review.setOrderId(orderId);
             review.setProductId(product.getId());
             review.setRating(Math.round(binding.ratingBar.getRating()));
-            review.setFirstName(user.getFirstname());
-            review.setLastName(user.getLastname());
-            review.setAvatar(user.getAvatar());
+            UserReviewDto u = new UserReviewDto();
+            u.setId(user.getId());
+            u.setFirstname(user.getFirstname());
+            u.setLastname(user.getLastname());
+            u.setAvatar(user.getAvatar());
+            review.setUserReviewDto(u);
+            review.setApproved(true);
             String req = new Gson().toJson(review);
             JsonParser parser = new JsonParser();
             progress.show();
@@ -110,7 +123,10 @@ public class Feedback extends AppCompatActivity {
                     if(response.isSuccessful() && response.body() != null){
                         ToastUtil.showToast(getApplicationContext(), "Submit feedback successfully");
                         Intent intent = new Intent(getApplicationContext(), OrderDetail.class);
+                        if(rv != null)
+                            intent = new Intent(getApplicationContext(), MyReview.class);
                         intent.putExtra("orderId", orderId);
+                        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                         getApplicationContext().startActivity(intent);
                     }
                     progress.dismiss();

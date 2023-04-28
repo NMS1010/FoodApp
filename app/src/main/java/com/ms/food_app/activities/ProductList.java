@@ -71,7 +71,6 @@ public class ProductList extends AppCompatActivity {
                 binding.productLoading.setVisibility(View.VISIBLE);
                 if (count < 20) {
                     setData(PAGE_INDEX, PAGE_SIZE);
-                    binding.productLoading.setVisibility(View.GONE);
                 }
             }
         });
@@ -87,7 +86,7 @@ public class ProductList extends AppCompatActivity {
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     allProducts = response.body().getProducts();
-                    setData(PAGE_INDEX, PAGE_SIZE);
+                    setData(PAGE_INDEX , PAGE_SIZE);
                 }
                 progress.dismiss();
             }
@@ -106,8 +105,8 @@ public class ProductList extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    currProducts = response.body().getProducts();
-                    adapter.updateProducts(currProducts);
+                    allProducts = response.body().getProducts();
+                    setData(PAGE_INDEX , PAGE_SIZE);
                 }
                 progress.dismiss();
             }
@@ -120,6 +119,10 @@ public class ProductList extends AppCompatActivity {
         });
     }
     private void setData(int begin, int amount){
+        if(currProducts.size() == allProducts.size()) {
+            binding.productLoading.setVisibility(View.GONE);
+            return;
+        }
         if(begin + amount > allProducts.size()){
             adapter.updateProducts(allProducts);
             return;
@@ -128,6 +131,6 @@ public class ProductList extends AppCompatActivity {
             currProducts.add(allProducts.get(i));
         }
         adapter.updateProducts(currProducts);
-        PAGE_INDEX ++;
+        PAGE_INDEX += PAGE_SIZE;
     }
 }

@@ -19,6 +19,7 @@ import com.ms.food_app.models.OrderItem;
 import com.ms.food_app.utils.Constants;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.OrderDetailViewHolders>{
     private Context context;
@@ -46,10 +47,10 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         Glide.with(context)
                 .load(orderItem.getProduct().getImages().get(0))
                 .into(holder.binding.orderItemImgVOrderItem);
-        if(order != null && order.getStatus() != Constants.DELIVERED){
-            holder.binding.reviewBtn.setVisibility(View.VISIBLE);
-        }else{
+        if(order != null && !Objects.equals(order.getStatus(), Constants.DELIVERED) || orderItem.getRating()){
             holder.binding.reviewBtn.setVisibility(View.GONE);
+        }else{
+            holder.binding.reviewBtn.setVisibility(View.VISIBLE);
         }
         holder.binding.reviewBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, Feedback.class);

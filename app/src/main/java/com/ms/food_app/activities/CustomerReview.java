@@ -75,6 +75,7 @@ public class CustomerReview extends AppCompatActivity {
     }
     private void loadReview(){
         progress.show();
+        binding.reviewRate.setText(String.valueOf(product.getRating()));
         BaseAPIService.createService(IReviewService.class).getReviewByProduct(product.getId()).enqueue(new Callback<List<Review>>() {
             @Override
             public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {

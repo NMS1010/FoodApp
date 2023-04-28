@@ -13,10 +13,10 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import java.util.List;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderViewHolder> {
-    private List<Integer> images;
+    private List<String> images;
     private Context context;
 
-    public SliderAdapter(Context context, List<Integer> images) {
+    public SliderAdapter(Context context, List<String> images) {
         this.images = images;
         this.context = context;
     }
@@ -29,9 +29,9 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderViewHol
 
     @Override
     public void onBindViewHolder(SliderViewHolder viewHolder, int position) {
-        int img = images.get(position);
+        String imgUrl = images.get(position);
         Glide.with(context)
-                .load(img)
+                .load(imgUrl)
                 .into(viewHolder.sliderItem_ImgV);
     }
 
