@@ -1,21 +1,40 @@
 package com.ms.food_app.activities;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ms.food_app.databinding.ActivitySigninBinding;
 import com.ms.food_app.models.User;
 import com.ms.food_app.models.requests.LoginRequest;
+import com.ms.food_app.models.requests.RegisterRequest;
 import com.ms.food_app.models.response.AuthResponse;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IAuthService;
@@ -31,6 +50,7 @@ import retrofit2.Response;
 public class Signin extends AppCompatActivity {
     private ActivitySigninBinding binding;
     private ProgressDialog progress;
+    GoogleSignInClient gsc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +58,10 @@ public class Signin extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this,gso);
+
         progress = LoadingUtil.setLoading(this);
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
@@ -45,6 +69,7 @@ public class Signin extends AppCompatActivity {
         }
         setEvents();
     }
+
     private Boolean isValidated() {
         if (binding.emailEtLogin.getText().toString().trim().isEmpty()) {
             binding.emailEtLogin.setError("Enter your username");
@@ -56,6 +81,89 @@ public class Signin extends AppCompatActivity {
             return true;
         }
     }
+    ActivityResultLauncher<Intent> googleSignInActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+                    handleGoogleResp(task);
+                }
+            });
+    private void googleSignIn(){
+        gsc.signOut();
+        Intent signInIntent = gsc.getSignInIntent();
+
+        googleSignInActivityResultLauncher.launch(signInIntent);
+    }
+    private void handleGoogleResp(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if(account != null){
+                LoginRequest loginRequest  =new LoginRequest(account.getEmail(), account.getId());
+                String req = new Gson().toJson(loginRequest);
+                JsonParser parser  =new JsonParser();
+                progress.show();
+                BaseAPIService.createService(IAuthService.class).login((JsonObject) parser.parse(req)).enqueue(new Callback<AuthResponse>() {
+                    @Override
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                        if(response.isSuccessful() && response.body() != null){
+                            AuthResponse authResponse = response.body();
+                            if (response.body().getAccessToken() != null && !response.body().getAccessToken().equals("")) {
+                                SharedPrefManager.getInstance(getApplicationContext()).saveAuthToken(authResponse);
+                                saveCurrentUser(authResponse.getUserId());
+                            }else{
+                                googleSignUp(account, parser);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AuthResponse> call, Throwable t) {
+                        Log.d("Error", t.getMessage());
+                        progress.dismiss();
+                    }
+                });
+                Log.v(TAG, "Account token:" + account.getEmail());
+            }
+        } catch (ApiException e) {
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+        }
+    }
+    private void googleSignUp(GoogleSignInAccount account, JsonParser parser){
+        RegisterRequest registerRequest  =new RegisterRequest(
+                account.getFamilyName(),
+                account.getGivenName(),
+                account.getEmail(),
+                account.getId()
+        );
+        String req = new Gson().toJson(registerRequest);
+
+        BaseAPIService.createService(IAuthService.class).signup((JsonObject) parser.parse(req)).enqueue(new Callback<AuthResponse>() {
+            @Override
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                if(response.body() == null){
+                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    return;
+                }
+                AuthResponse authResponse = response.body();
+                if (authResponse.getAccessToken() != null && !authResponse.getAccessToken().equals("")) {
+                    SharedPrefManager.getInstance(getApplicationContext()).saveAuthToken(authResponse);
+                    saveCurrentUser(authResponse.getUserId());
+                }else{
+                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    progress.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
+                Log.d("error", t.getMessage());
+                progress.dismiss();
+            }
+        });
+    }
     private void setEvents(){
         binding.signinBtnLogin.setOnClickListener(view -> {
             if(!isValidated())
@@ -64,6 +172,9 @@ public class Signin extends AppCompatActivity {
         });
         binding.signupBtnLogin.setOnClickListener(view -> {
             startActivity(new Intent(this, Signup.class));
+        });
+        binding.signinBtnGoogleLogin.setOnClickListener(view -> {
+            googleSignIn();
         });
     }
     private void login() {
