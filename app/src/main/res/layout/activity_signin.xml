@@ -85,5 +85,18 @@
             android:textSize="@dimen/_13ssp"
             android:textStyle="bold"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signinBtnGoogle_Login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:drawableLeft="@drawable/common_google_signin_btn_icon_dark"
+            android:text="@string/sign_in_google"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold"
+            app:backgroundTint="#EC6464"
+            app:cornerRadius="@dimen/_8sdp" />
+
     </LinearLayout>
 </ScrollView>

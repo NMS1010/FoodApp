@@ -11,11 +11,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivitySignupBinding;
+import com.ms.food_app.models.Product;
 import com.ms.food_app.models.requests.LoginRequest;
 import com.ms.food_app.models.requests.RegisterRequest;
 import com.ms.food_app.models.response.AuthResponse;
@@ -38,6 +40,7 @@ import retrofit2.Response;
 public class Signup extends AppCompatActivity {
     private ActivitySignupBinding binding;
     private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,7 @@ public class Signup extends AppCompatActivity {
                     return;
                 }
                 AuthResponse authResponse = response.body();
-                if (!authResponse.getAccessToken().equals("")) {
+                if (authResponse.getAccessToken() != null && !authResponse.getAccessToken().equals("")) {
                     ToastUtil.showToast(getApplicationContext(),"Registering is successfully");
                     finish();
                     Intent intent = new Intent(Signup.this, Signin.class);
