@@ -81,6 +81,7 @@ public class CustomerReview extends AppCompatActivity {
             public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     reviews = response.body();
+                    binding.counterReviewOrder.setText(reviews.size() + " ratings");
                     adapter.updateReview(reviews);
                 }
                 progress.dismiss();

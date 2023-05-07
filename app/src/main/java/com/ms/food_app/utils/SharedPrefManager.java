@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.ms.food_app.activities.IntroScreen;
 import com.ms.food_app.activities.Signin;
 import com.ms.food_app.models.User;
 import com.ms.food_app.models.response.AuthResponse;
@@ -26,7 +27,7 @@ public class SharedPrefManager {
         }
         return instance;
     }
-    //this method will store the user data in shared preferences
+
     public void saveUser (User user) {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -44,7 +45,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    //this method will checker whether user is already logged in or not
+
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences (SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USER,null) != null &&
@@ -54,7 +55,7 @@ public class SharedPrefManager {
                 getAuthToken().getAccessToken() != null &&
                 getAuthToken().getRefreshToken() != null;
     }
-    //this method will give the logged in user
+
     public User getUser() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences (SHARED_PREF_NAME, Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -72,7 +73,7 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        Intent intent = new Intent(ctx, Signin.class);
+        Intent intent = new Intent(ctx, IntroScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
     }

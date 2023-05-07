@@ -8,10 +8,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.ms.food_app.R;
+import com.ms.food_app.activities.admin.AdminMain;
+import com.ms.food_app.activities.admin.OrderStatus;
 import com.ms.food_app.adapters.OrderDetailAdapter;
 import com.ms.food_app.databinding.ActivityOrderDetailBinding;
 import com.ms.food_app.models.Order;
@@ -56,13 +60,16 @@ public class OrderDetail extends AppCompatActivity {
             startActivity(new Intent(this, IntroScreen.class));
             return;
         }
+            if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                binding.statusUpdate.setVisibility(View.VISIBLE);
+            else
+                binding.statusUpdate.setVisibility(View.GONE);
         if(orderId == -1){
             Intent intent = new Intent(getApplicationContext(), Main.class);
             intent.putExtra("Check", "Order");
             startActivity(intent);
             return;
         }
-        User user = SharedPrefManager.getInstance(this).getUser();
         progressDialog.show();
         BaseAPIService.createService(IOrderService.class).getOrderById(orderId).enqueue(new Callback<Order>() {
             @Override
@@ -92,10 +99,19 @@ public class OrderDetail extends AppCompatActivity {
     private void setEvents(){
         binding.back.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), Main.class);
+            if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
+                if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                    intent = new Intent(this, AdminMain.class);
+                startActivity(intent);
+            }
             intent.putExtra("Check", "Order");
             startActivity(intent);
         });
-
+        binding.statusUpdate.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), OrderStatus.class);
+            intent.putExtra("order", new Gson().toJson(order));
+            startActivity(intent);
+        });
     }
     private void setAdapter(){
         if(orderItemList == null)

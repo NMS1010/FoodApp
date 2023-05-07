@@ -98,18 +98,19 @@ public class Orders extends Fragment {
         });
     }
     private void resetBackground(){
-        binding.pendingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
+        binding.pendingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
 
-        binding.canceledBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
+        binding.canceledBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
 
-        binding.completedBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
+        binding.completedBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
 
-        binding.processingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
+        binding.processingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
 
-        binding.shippingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
+        binding.shippingBtnOrderList.setTextColor(this.getResources().getColor(R.color.white));
     }
     private void setChosenBackground(Button button){
-        button.setTextColor(getResources().getColor(R.color.blue2));
+//        button.setBackgroundColor(R.color.white);
+        button.setTextColor(this.getResources().getColor(R.color.blue2));
     }
     private void loadOrderByStatus(String status){
         progress.show();

@@ -58,6 +58,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartAdapter.CartViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
+        if(cartItem.getProduct().getQuantity() == 0){
+            removeCartItem(cartItem, position);
+            return;
+        }
         Glide.with(context).load(cartItem.getProduct().getImages().get(0)).into(holder.binding.imageFood);
         holder.binding.nameFood.setText(cartItem.getProduct().getName());
         holder.binding.priceFood.setText(String.valueOf(cartItem.getProduct().getPrice()));

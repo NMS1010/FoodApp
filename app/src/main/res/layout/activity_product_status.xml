@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update Product"
+        android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -44,6 +45,7 @@
 
             <RelativeLayout
                 android:layout_width="24dp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:layout_height="24dp"
                 android:padding="7dp">
 
@@ -56,14 +58,19 @@
                     app:tint="@color/White" />
             </RelativeLayout>
 
-            <TextView
+            <EditText
                 android:id="@+id/count"
-                android:layout_width="30dp"
-                android:layout_height="24dp"
+
+                android:layout_width="60dp"
+                android:inputType="numberDecimal"
+                android:layout_height="40dp"
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="@color/White" />
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/_6sdp"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:padding="7dp">
@@ -79,50 +86,91 @@
 
         </LinearLayout>
     </LinearLayout>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:textSize="18sp"
+        android:layout_marginRight="20dp"/>
+    <EditText
+        android:id="@+id/priceProduct"
+        android:layout_width="378dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/background_input"
+        android:hint="Price"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_13ssp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Promotional Price"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:textSize="18sp"
+        android:layout_marginRight="20dp"/>
+    <EditText
+        android:id="@+id/promotionalPriceProduct"
+        android:layout_width="378dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/background_input"
+        android:hint="Promotional Price"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_13ssp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/grey" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Product Status"
-        android:textSize="18sp" />
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="Product Status"-->
+<!--        android:textSize="18sp" />-->
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+<!--    <RadioGroup-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp">-->
 
-        <RadioButton
-            android:id="@+id/rb_in_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:buttonTint="@color/teal"
-            android:checked="true"
-            android:text="In use" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_in_user"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:buttonTint="@color/teal"-->
+<!--            android:checked="true"-->
+<!--            android:text="In use" />-->
 
-        <RadioButton
-            android:id="@+id/rb_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:buttonTint="@color/teal"
-            android:text="Out of stock" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_out"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:buttonTint="@color/teal"-->
+<!--            android:text="Out of stock" />-->
 
-        <RadioButton
-            android:id="@+id/rb_not_available"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:buttonTint="@color/teal"
-            android:text="No longer available" />
-    </RadioGroup>
+<!--        <RadioButton-->
+<!--            android:id="@+id/rb_not_available"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:buttonTint="@color/teal"-->
+<!--            android:text="No longer available" />-->
+<!--    </RadioGroup>-->
     <Button
         android:id="@+id/updateProduct"
         android:layout_width="match_parent"

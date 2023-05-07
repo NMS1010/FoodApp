@@ -48,8 +48,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addressListRV_address"
-        android:layout_width="403dp"
-        android:layout_height="604dp"
+        android:layout_width="@dimen/_300sdp"
+        android:layout_height="@dimen/_400sdp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,14 +60,14 @@
 
     <Button
         android:id="@+id/addNewBtn_address"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_50sdp"
         android:text="New Address"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressListRV_address"
-        app:layout_constraintVertical_bias="0.437" />
+        app:layout_constraintVertical_bias="0.217" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

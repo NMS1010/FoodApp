@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ms.food_app.activities.admin.AdminMain;
 import com.ms.food_app.databinding.ActivitySigninBinding;
 import com.ms.food_app.models.User;
 import com.ms.food_app.models.requests.LoginRequest;
@@ -65,7 +66,10 @@ public class Signin extends AppCompatActivity {
         progress = LoadingUtil.setLoading(this);
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, Main.class));
+            Intent intent = new Intent(this, Main.class);
+            if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                intent = new Intent(Signin.this, AdminMain.class);
+            startActivity(intent);
         }
         setEvents();
     }
@@ -125,7 +129,6 @@ public class Signin extends AppCompatActivity {
                         progress.dismiss();
                     }
                 });
-                Log.v(TAG, "Account token:" + account.getEmail());
             }
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -227,6 +230,8 @@ public class Signin extends AppCompatActivity {
                     ToastUtil.showToast(getApplicationContext(),"Logging successfully");
                     finish();
                     Intent intent = new Intent(Signin.this, Main.class);
+                    if(currentUser.getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                        intent = new Intent(Signin.this, AdminMain.class);
                     startActivity(intent);
                     progress.dismiss();
                 }else{
