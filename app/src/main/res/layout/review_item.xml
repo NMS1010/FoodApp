@@ -7,16 +7,17 @@
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
     android:paddingTop="10dp">
-
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageUser"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/circle_bg"
-        android:elevation="4dp"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:background="@drawable/background_image"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_oval="true"
+        android:elevation="4dp"/>
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

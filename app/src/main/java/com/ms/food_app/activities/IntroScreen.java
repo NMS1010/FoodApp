@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ms.food_app.R;
+import com.ms.food_app.activities.admin.AdminMain;
 import com.ms.food_app.databinding.ActivityIntroScreenBinding;
 import com.ms.food_app.utils.ContextUtil;
 import com.ms.food_app.utils.SharedPrefManager;
@@ -25,7 +26,10 @@ public class IntroScreen extends AppCompatActivity {
         ContextUtil.context = getApplicationContext();
         if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
             finish();
-            startActivity(new Intent(this, Main.class));
+            Intent intent = new Intent(this, Main.class);
+            if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                intent = new Intent(this, AdminMain.class);
+            startActivity(intent);
         }
     }
     private void setEvents(){

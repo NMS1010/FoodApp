@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.ms.food_app.R;
 import com.ms.food_app.activities.Cart;
+import com.ms.food_app.activities.IntroScreen;
 import com.ms.food_app.activities.ProductList;
 import com.ms.food_app.activities.Search;
 import com.ms.food_app.activities.Signin;
@@ -74,7 +75,7 @@ public class Home extends Fragment {
         ContextUtil.context = getActivity();
         // Inflate the layout for this fragment
         if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
-            startActivity(new Intent(getActivity(), Signin.class));
+            startActivity(new Intent(getActivity(), IntroScreen.class));
         }
         progress = LoadingUtil.setLoading(getActivity());
         progress.show();

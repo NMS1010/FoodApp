@@ -24,7 +24,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.ms.food_app.R;
+import com.ms.food_app.activities.Main;
 import com.ms.food_app.activities.ProductDetail;
+import com.ms.food_app.activities.admin.AdminMain;
+import com.ms.food_app.activities.admin.ProductStatus;
 import com.ms.food_app.databinding.ProductItemHorizontalBinding;
 import com.ms.food_app.models.Product;
 import com.ms.food_app.models.Save;
@@ -63,28 +66,24 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
 //        progress.show();
+        if(SharedPrefManager.getInstance(context).isLoggedIn()){
+            if(SharedPrefManager.getInstance(context).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                holder.binding.favoriteFood.setVisibility(View.GONE);
+        }
         Glide.with(context)
                 .load(product.getImages().get(0))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .override(200,200)
                 .centerCrop()
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        progress.dismiss();
-                        return false;
-                    }
-                })
                 .into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
         holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetail.class);
+            if(SharedPrefManager.getInstance(context).isLoggedIn()){
+                if(SharedPrefManager.getInstance(context).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                    intent = new Intent(context, ProductStatus.class);
+            }
             intent.putExtra("product", new Gson().toJson(product));
             context.startActivity(intent);
         });

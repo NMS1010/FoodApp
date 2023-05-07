@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ms.food_app.R;
+import com.ms.food_app.activities.admin.AdminMain;
 import com.ms.food_app.databinding.ActivityUpdateProfileBinding;
 import com.ms.food_app.databinding.FragmentProfileBinding;
 import com.ms.food_app.fragments.Home;
@@ -41,6 +42,7 @@ import com.ms.food_app.fragments.Profile;
 import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
+import com.ms.food_app.utils.DatePickerUtil;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.RealPathUtil;
 import com.ms.food_app.utils.SharedPrefManager;
@@ -51,6 +53,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,7 +66,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateProfile extends AppCompatActivity {
+public class UpdateProfile extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     ActivityUpdateProfileBinding binding;
     public static final  int MY_REQUEST_CODE = 100;
@@ -74,6 +77,7 @@ public class UpdateProfile extends AppCompatActivity {
     private int lastSelectedDayOfMonth;
     private ArrayAdapter<CharSequence> adapter;
     private ProgressDialog progress;
+    private User user;
     public static  String[] storge_permissions = {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -173,19 +177,14 @@ public class UpdateProfile extends AppCompatActivity {
         if(!SharedPrefManager.getInstance(this).isLoggedIn()){
             startActivity(new Intent(this, IntroScreen.class));
         }
-        User user = SharedPrefManager.getInstance(this).getUser();
+        user = SharedPrefManager.getInstance(this).getUser();
         binding.firstNameTvUpdateProfile.setText(user.getFirstname());
         binding.lastNameTvUpdateProfile.setText(user.getLastname());
         binding.emailTvUpdateProfile.setText(user.getEmail());
+        binding.emailTvUpdateProfile.setEnabled(false);
         binding.phoneTvUpdateProfile.setText(user.getPhone());
         if(user.getBirthday() != null){
             binding.birthdayTvUpdateProfile.setText(user.getBirthday());
-            Date date =new SimpleDateFormat("yyyy-MM-dd").parse(user.getBirthday());
-            if(date != null) {
-                lastSelectedDayOfMonth = date.getDay();
-                lastSelectedYear = date.getYear();
-                lastSelectedMonth = date.getMonth();
-            }
         }
         if(!Objects.equals(user.getGender(), "")) {
             int spinnerPosition = adapter.getPosition(user.getGender());
@@ -194,18 +193,6 @@ public class UpdateProfile extends AppCompatActivity {
         Glide.with(this)
                 .load(user.getAvatar())
                 .into(binding.avatarImgVProfile);
-    }
-    private void selectDate(){
-        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
-            binding.birthdayTvUpdateProfile.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-            lastSelectedYear = year;
-            lastSelectedMonth = monthOfYear;
-            lastSelectedDayOfMonth = dayOfMonth;
-        };
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDayOfMonth);
-        datePickerDialog.show();
     }
     private Boolean isValidated() {
         if (binding.emailTvUpdateProfile.getText().toString().trim().isEmpty()) {
@@ -232,13 +219,12 @@ public class UpdateProfile extends AppCompatActivity {
             SharedPrefManager.getInstance(this).logout();
             startActivity(new Intent(this, IntroScreen.class));
         }
-        User user = SharedPrefManager.getInstance(this).getUser();
         user.setEmail(binding.emailTvUpdateProfile.getText().toString());
         user.setPhone(binding.phoneTvUpdateProfile.getText().toString());
         user.setFirstname(binding.firstNameTvUpdateProfile.getText().toString());
         user.setLastname(binding.lastNameTvUpdateProfile.getText().toString());
         user.setGender(binding.genderSpinUpdateProfile.getSelectedItem().toString());
-        user.setBirthday(lastSelectedYear + "-" + (lastSelectedMonth + 1) + "-" + lastSelectedDayOfMonth);
+        user.setBirthday(binding.birthdayTvUpdateProfile.getText().toString());
         MultipartBody.Part avatar = null;
         if(mUri != null){
             String IMAGE_PATH = RealPathUtil.getRealPath(this, mUri);
@@ -269,6 +255,12 @@ public class UpdateProfile extends AppCompatActivity {
                     User user = response.body();
                     SharedPrefManager.getInstance(getApplicationContext()).saveUser(user);
                     Intent intent = new Intent(getApplicationContext(), Main.class);
+                    if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
+                        if(SharedPrefManager.getInstance(getApplicationContext()).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))){
+                            intent = new Intent(getApplicationContext(), AdminMain.class);
+                        }
+
+                    }
                     intent.putExtra("Check", "Profile");
                     startActivity(intent);
                 }else{
@@ -287,6 +279,12 @@ public class UpdateProfile extends AppCompatActivity {
     private void setEvents(){
         binding.backBtnUpdateProfile.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), Main.class);
+            if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
+                if(SharedPrefManager.getInstance(getApplicationContext()).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))){
+                    intent = new Intent(getApplicationContext(), AdminMain.class);
+                }
+
+            }
             intent.putExtra("Check", "Profile");
             startActivity(intent);
         });
@@ -294,7 +292,8 @@ public class UpdateProfile extends AppCompatActivity {
             CheckPermission();
         });
         binding.selectdateUpdateProfile.setOnClickListener(view -> {
-            selectDate();
+            DatePickerUtil mDatePickerDialogFragment = new DatePickerUtil();
+            mDatePickerDialogFragment.show(getSupportFragmentManager(), "DATE PICK");
         });
         binding.updateBtnUpdateProfile.setOnClickListener(view -> {
             if(isValidated() ){
@@ -303,4 +302,16 @@ public class UpdateProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.set(Calendar.YEAR, i);
+        mCalendar.set(Calendar.MONTH, i1);
+        mCalendar.set(Calendar.DAY_OF_MONTH, i2);
+        lastSelectedYear = mCalendar.get(Calendar.YEAR);
+        lastSelectedMonth = mCalendar.get(Calendar.MONTH);
+        lastSelectedDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
+        String selectedDate = lastSelectedYear + "-" + lastSelectedMonth + "-" + lastSelectedDayOfMonth;
+        binding.birthdayTvUpdateProfile.setText(selectedDate);
+    }
 }

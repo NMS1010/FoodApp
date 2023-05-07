@@ -34,9 +34,11 @@ import retrofit2.Response;
 
 public class ProductList extends AppCompatActivity {
     private int count = 0;
-    private final int PAGE_SIZE = 5;
+    private final int PAGE_SIZE = 10;
     private int PAGE_INDEX = 0;
-    private List<Product> allProducts;
+    private int TOTAL_PAGE = -1;
+//    private List<Product> allProducts;
+    private boolean isLoading = false;
     private List<Product> currProducts;
     private ActivityProductListBinding binding;
     private ProductAdapter adapter;
@@ -48,7 +50,6 @@ public class ProductList extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        allProducts  = new ArrayList<>();
         currProducts = new ArrayList<>();
         progress = LoadingUtil.setLoading(this);
 
@@ -56,7 +57,7 @@ public class ProductList extends AppCompatActivity {
         if(cate != null && !cate.equals("")){
             fetchByCategory(new Gson().fromJson(cate, Category.class));
         }else{
-            fetchAllData();
+            fetchPagingData();
         }
         adapter = new ProductAdapter(this, currProducts);
         binding.productRV.setAdapter(adapter);
@@ -65,13 +66,9 @@ public class ProductList extends AppCompatActivity {
     }
     private void setEvent(){
         binding.idNestedSV.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            count = 0;
-            if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                count++;
+            if (!isLoading && scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                 binding.productLoading.setVisibility(View.VISIBLE);
-                if (count < 20) {
-                    setData(PAGE_INDEX, PAGE_SIZE);
-                }
+                fetchPagingData();
             }
         });
         binding.backBtn.setOnClickListener(view -> {
@@ -79,16 +76,24 @@ public class ProductList extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void fetchAllData(){
-        progress.show();
-        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ProductResponse>() {
+    private void fetchPagingData(){
+        if(TOTAL_PAGE != -1 && PAGE_INDEX > TOTAL_PAGE - 1){
+            binding.productLoading.setVisibility(View.GONE);
+            return;
+        }
+        isLoading = true;
+        BaseAPIService.createService(IProductService.class).getAllProducts(PAGE_INDEX, PAGE_SIZE).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    allProducts = response.body().getProducts();
-                    setData(PAGE_INDEX , PAGE_SIZE);
+                    ProductResponse resp = response.body();
+                    TOTAL_PAGE = resp.getTotalPage();
+                    currProducts.addAll(resp.getProducts());
+                    adapter.updateProducts(currProducts);
+                    PAGE_INDEX ++;
+                    binding.productLoading.setVisibility(View.GONE);
+                    isLoading = false;
                 }
-                progress.dismiss();
             }
 
             @Override
@@ -105,8 +110,7 @@ public class ProductList extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    allProducts = response.body().getProducts();
-                    setData(PAGE_INDEX , PAGE_SIZE);
+                    adapter.updateProducts(response.body().getProducts());
                 }
                 progress.dismiss();
             }
@@ -118,19 +122,5 @@ public class ProductList extends AppCompatActivity {
             }
         });
     }
-    private void setData(int begin, int amount){
-        if(currProducts.size() == allProducts.size()) {
-            binding.productLoading.setVisibility(View.GONE);
-            return;
-        }
-        if(begin + amount > allProducts.size()){
-            adapter.updateProducts(allProducts);
-            return;
-        }
-        for(int i=begin; i< begin + amount; i++){
-            currProducts.add(allProducts.get(i));
-        }
-        adapter.updateProducts(currProducts);
-        PAGE_INDEX += PAGE_SIZE;
-    }
+
 }

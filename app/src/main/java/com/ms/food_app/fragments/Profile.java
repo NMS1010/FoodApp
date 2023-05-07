@@ -19,6 +19,7 @@ import com.ms.food_app.activities.MyReview;
 import com.ms.food_app.activities.SaveList;
 import com.ms.food_app.activities.Signin;
 import com.ms.food_app.activities.UpdateProfile;
+import com.ms.food_app.activities.admin.ProductStatus;
 import com.ms.food_app.databinding.FragmentProfileBinding;
 import com.ms.food_app.models.User;
 import com.ms.food_app.utils.SharedPrefManager;
@@ -79,6 +80,14 @@ public class Profile extends Fragment {
         if(!SharedPrefManager.getInstance(getContext()).isLoggedIn()){
             SharedPrefManager.getInstance(getContext()).logout();
             startActivity(new Intent(getActivity(), IntroScreen.class));
+        }
+        if(SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
+            if(SharedPrefManager.getInstance(getActivity()).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))){
+                binding.Favorite.setVisibility(View.GONE);
+                binding.Address.setVisibility(View.GONE);
+                binding.myReview.setVisibility(View.GONE);
+            }
+
         }
         User user = SharedPrefManager.getInstance(getContext()).getUser();
         binding.nameUser.setText(user.getFirstname() + " " + user.getLastname());

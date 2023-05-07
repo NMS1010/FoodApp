@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -101,6 +102,14 @@ public class ProductDetail extends AppCompatActivity {
                 progress.dismiss();
             }
         });
+        if(product.getQuantity() == 0){
+            binding.notAvailable.setVisibility(View.VISIBLE);
+            binding.addToCart.setVisibility(View.GONE);
+        }
+        else{
+            binding.notAvailable.setVisibility(View.GONE);
+            binding.addToCart.setVisibility(View.VISIBLE);
+        }
         binding.nameDetail.setText(product.getName());
         binding.descripDetail.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
         binding.priceDetail.setText(product.getPrice() + " VND");
@@ -119,7 +128,7 @@ public class ProductDetail extends AppCompatActivity {
     }
     private void setEvents(){
         binding.back.setOnClickListener(view -> {
-            Intent intent = new Intent(this, Main.class);
+            Intent intent = new Intent(this, ProductList.class);
             finish();
             startActivity(intent);
         });
