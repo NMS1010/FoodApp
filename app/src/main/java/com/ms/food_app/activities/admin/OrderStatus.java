@@ -53,8 +53,10 @@ public class OrderStatus extends AppCompatActivity {
         }
         if(order != null ){
             chosenStatus = order.getStatus();
+            binding.orderTextId.setText("Order #" + order.getId());
             int radioButtonCount = binding.statusRadioGroup.getChildCount();
-            if(Objects.equals(chosenStatus, Constants.DELIVERED)){
+            if(Objects.equals(chosenStatus, Constants.DELIVERED) ||
+                    Objects.equals(chosenStatus, Constants.CANCELLED) ){
                 for(int i = 0; i < binding.statusRadioGroup.getChildCount(); i++){
                     View radioButtonView = binding.statusRadioGroup.getChildAt(i);
                     if(radioButtonView instanceof RadioButton) {

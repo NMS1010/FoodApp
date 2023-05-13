@@ -54,7 +54,7 @@ public class CustomerReview extends AppCompatActivity {
             setAdapter();
             loadReview();
         }else{
-            ToastUtil.showToast(this,"Cannot load review");
+            ToastUtil.showToast(binding.getRoot(),"Cannot load review", false);
             finish();
         }
     }

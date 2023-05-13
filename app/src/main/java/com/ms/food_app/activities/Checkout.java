@@ -85,7 +85,7 @@ public class Checkout extends AppCompatActivity {
             }
         }
         if (selectedAddress == null) {
-            ToastUtil.showToast(this, "Please set your address");
+            ToastUtil.showToast(binding.getRoot(), "Please set your address", false);
             startActivity(new Intent(this, Cart.class));
             return;
         }
@@ -171,12 +171,11 @@ public class Checkout extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Order> call, Response<Order> response) {
                     if(response.body() != null && response.isSuccessful()){
-                        ToastUtil.showToast(getApplicationContext(), "Success in ordering this products");
                         finish();
                         startActivity(new Intent(getApplicationContext(), SuccessNotify.class));
                     }
                     else{
-                        ToastUtil.showToast(getApplicationContext(), "Failed to ordering this products");
+                        ToastUtil.showToast(binding.getRoot(), "Failed to ordering this products", false);
                     }
                     progressDialog.dismiss();
                 }

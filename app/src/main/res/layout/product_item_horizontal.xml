@@ -119,6 +119,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="11dp"
         android:background="@drawable/fav_btn"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/priceFood"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/priceFood" />

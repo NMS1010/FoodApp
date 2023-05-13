@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +45,10 @@ public class Products extends Fragment {
     private ArrayList<Product> products;
     private ProductAdapter productAdapter;
     private ProgressDialog progress;
+    private final int PAGE_SIZE = 5;
+    private int PAGE_INDEX = 0;
+    private int TOTAL_PAGE = -1;
+    private boolean isLoading = false;
     public Products() {
         // Required empty public constructor
     }
@@ -68,9 +73,18 @@ public class Products extends Fragment {
             startActivity(new Intent(getActivity(), IntroScreen.class));
         }
         progress = LoadingUtil.setLoading(getActivity());
+        setEvents();
         setAdapter();
-        LoadProducts();
+        loadProducts();
         return binding.getRoot();
+    }
+    private void setEvents(){
+        binding.idNestedSV.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (!isLoading && scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                binding.productLoading.setVisibility(View.VISIBLE);
+                loadProducts();
+            }
+        });
     }
     private void setAdapter(){
         products = new ArrayList<>();
@@ -79,14 +93,23 @@ public class Products extends Fragment {
         binding.productRV.setAdapter(productAdapter);
         binding.productRV.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
     }
-    private void LoadProducts(){
-        progress.show();
-        BaseAPIService.createService(IProductService.class).getAllProducts().enqueue(new Callback<ProductResponse>() {
+    private void loadProducts(){
+        if(TOTAL_PAGE != -1 && PAGE_INDEX > TOTAL_PAGE - 1){
+            binding.productLoading.setVisibility(View.GONE);
+            return;
+        }
+        isLoading = true;
+        BaseAPIService.createService(IProductService.class).getAllProducts(PAGE_INDEX, PAGE_SIZE).enqueue(new Callback<ProductResponse>() {
             @Override
             public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    products = new ArrayList<>(response.body().getProducts());
+                    ProductResponse resp = response.body();
+                    TOTAL_PAGE = resp.getTotalPage();
+                    products.addAll(resp.getProducts());
                     productAdapter.updateProducts(products);
+                    PAGE_INDEX ++;
+                    binding.productLoading.setVisibility(View.GONE);
+                    isLoading = false;
                 }
                 progress.dismiss();
             }
@@ -94,7 +117,6 @@ public class Products extends Fragment {
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("error", t.getMessage());
-                progress.dismiss();
             }
         });
     }

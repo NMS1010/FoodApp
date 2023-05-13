@@ -77,7 +77,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .centerCrop()
                 .into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
-        holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
+        holder.binding.priceFood.setText(product.getPrice() + " VND");
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProductDetail.class);
             if(SharedPrefManager.getInstance(context).isLoggedIn()){
@@ -89,28 +89,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         });
         holder.binding.countSold.setText(product.getSold() + " sold");
         holder.binding.rateReview.setText(String.valueOf(product.getRating()));
-        holder.binding.favoriteFood.setOnClickListener(view -> {
-            User user = SharedPrefManager.getInstance(context).getUser();
-            progress.show();
-            BaseAPIService.createService(ISaveService.class).saveProduct(user.getId(), product.getId()).enqueue(new Callback<Save>() {
-                @SuppressLint("ResourceAsColor")
-                @Override
-                public void onResponse(Call<Save> call, Response<Save> response) {
-                    if(response.isSuccessful() && response.body() != null){
-                        ToastUtil.showToast(context, "Succeed in adding product to your save list");
-                    }else{
-                        ToastUtil.showToast(context, "Failed to add product to your save list");
-                    }
-                    progress.dismiss();
-                }
-
-                @Override
-                public void onFailure(Call<Save> call, Throwable t) {
-                    Log.d("Error", t.getMessage());
-                    progress.dismiss();
-                }
-            });
-        });
+//        holder.binding.favoriteFood.setOnClickListener(view -> {
+//            User user = SharedPrefManager.getInstance(context).getUser();
+//            progress.show();
+//            BaseAPIService.createService(ISaveService.class).saveProduct(user.getId(), product.getId()).enqueue(new Callback<Save>() {
+//                @Override
+//                public void onResponse(Call<Save> call, Response<Save> response) {
+//                    if(response.isSuccessful() && response.body() != null){
+//                        ToastUtil.showToast(context, "Succeed in adding product to your save list");
+//
+//                    }else{
+//                        ToastUtil.showToast(context, "Failed to add product to your save list");
+//                    }
+//                    progress.dismiss();
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Save> call, Throwable t) {
+//                    Log.d("Error", t.getMessage());
+//                    progress.dismiss();
+//                }
+//            });
+//        });
     }
     @SuppressLint("NotifyDataSetChanged")
     public void updateProducts(List<Product> products){

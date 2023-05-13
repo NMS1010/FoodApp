@@ -33,11 +33,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductList extends AppCompatActivity {
-    private int count = 0;
-    private final int PAGE_SIZE = 10;
+    private final int PAGE_SIZE = 5;
     private int PAGE_INDEX = 0;
     private int TOTAL_PAGE = -1;
-//    private List<Product> allProducts;
     private boolean isLoading = false;
     private List<Product> currProducts;
     private ActivityProductListBinding binding;
@@ -99,7 +97,6 @@ public class ProductList extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProductResponse> call, Throwable t) {
                 Log.d("error", t.getMessage());
-                progress.dismiss();
             }
         });
     }

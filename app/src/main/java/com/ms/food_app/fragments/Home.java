@@ -96,6 +96,7 @@ public class Home extends Fragment {
                 add(getPath(R.drawable.img1));
                 add(getPath(R.drawable.img2));
                 add(getPath(R.drawable.img3));
+                add(getPath(R.drawable.img4));
             }
         };
 

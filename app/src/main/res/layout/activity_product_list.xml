@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddressList">
+    tools:context=".activities.ProductList">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="@dimen/_60sdp"
         android:background="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +28,8 @@
         <TextView
             android:id="@+id/title"
             style="@style/HeadLineText"
-            android:layout_width="88dp"
-            android:layout_height="33dp"
+            android:layout_width="188dp"
+            android:layout_height="47dp"
             android:text="All Foods"
             android:textAlignment="center"
             android:textSize="18sp"
@@ -50,14 +50,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/idNestedSV"
-        android:layout_width="411dp"
-        android:layout_height="666dp"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
         android:layout_marginBottom="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        tools:context=".activities.ProductList">
+        app:layout_constraintVertical_bias="0.23">
 
         <LinearLayout
             android:layout_width="match_parent"

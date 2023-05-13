@@ -1,5 +1,7 @@
 package com.ms.food_app.fragments;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,7 +43,7 @@ import retrofit2.Response;
 
 public class MyOrder extends Fragment {
 
-    private FragmentOrdersBinding binding;
+    private FragmentMyOrderBinding binding;
     private ProgressDialog progress;
     private List<Order> orderList;
     private OrderAdapter orderAdapter;
@@ -69,7 +71,7 @@ public class MyOrder extends Fragment {
             SharedPrefManager.getInstance(getActivity()).logout();
             startActivity(new Intent(getActivity(), IntroScreen.class));
         }
-        binding = FragmentOrdersBinding.inflate(inflater, container, false);
+        binding = FragmentMyOrderBinding.inflate(inflater, container, false);
         progress = LoadingUtil.setLoading(getActivity());
         setAdapter();
         loadOrderByStatus(Constants.NOT_PROCESSED);
@@ -128,6 +130,14 @@ public class MyOrder extends Fragment {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     orderList = response.body();
+                    if(orderList.size() == 0){
+                        binding.noItem.setVisibility(View.VISIBLE);
+                        binding.listOrderRv.setVisibility(View.GONE);
+                    }
+                    else{
+                        binding.noItem.setVisibility(View.GONE);
+                        binding.listOrderRv.setVisibility(VISIBLE);
+                    }
                     orderAdapter.updateOrders(orderList);
                 }
                 progress.dismiss();

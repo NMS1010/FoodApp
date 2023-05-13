@@ -147,7 +147,7 @@ public class Signin extends AppCompatActivity {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 if(response.body() == null){
-                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    ToastUtil.showToast(binding.getRoot(),"Failed to register account with this information", false);
                     return;
                 }
                 AuthResponse authResponse = response.body();
@@ -155,7 +155,7 @@ public class Signin extends AppCompatActivity {
                     SharedPrefManager.getInstance(getApplicationContext()).saveAuthToken(authResponse);
                     saveCurrentUser(authResponse.getUserId());
                 }else{
-                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    ToastUtil.showToast(binding.getRoot(),"Failed to register account with this information", false);
                     progress.dismiss();
                 }
             }
@@ -194,7 +194,7 @@ public class Signin extends AppCompatActivity {
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
 
                 if(response.body() == null){
-                    ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
+                    ToastUtil.showToast(binding.getRoot(),"Email or password is incorrect", false);
                     progress.dismiss();
                     return;
                 }
@@ -205,7 +205,7 @@ public class Signin extends AppCompatActivity {
                     saveCurrentUser(authResponse.getUserId());
 
                 }else{
-                    ToastUtil.showToast(getApplicationContext(),"Email or password is incorrect");
+                    ToastUtil.showToast(binding.getRoot(),"Email or password is incorrect", false);
                 }
             }
 
@@ -221,13 +221,13 @@ public class Signin extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if(response.body() == null){
-                    ToastUtil.showToast(getApplicationContext(),"Cannot login");
+                    ToastUtil.showToast(binding.getRoot(),"Cannot login", false);
                     return;
                 }
                 User currentUser = response.body();
                 SharedPrefManager.getInstance(getApplicationContext()).saveUser(currentUser);
                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()) {
-                    ToastUtil.showToast(getApplicationContext(),"Logging successfully");
+                    ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
                     finish();
                     Intent intent = new Intent(Signin.this, Main.class);
                     if(currentUser.getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
@@ -235,7 +235,7 @@ public class Signin extends AppCompatActivity {
                     startActivity(intent);
                     progress.dismiss();
                 }else{
-                    ToastUtil.showToast(getApplicationContext(),"Cannot login");
+                    ToastUtil.showToast(binding.getRoot(),"Cannot login", false);
                 }
             }
 

@@ -1,5 +1,7 @@
 package com.ms.food_app.fragments.admin;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import com.ms.food_app.R;
 import com.ms.food_app.activities.IntroScreen;
 import com.ms.food_app.adapters.OrderAdapter;
 import com.ms.food_app.databinding.FragmentMyOrderBinding;
+import com.ms.food_app.databinding.FragmentOrdersBinding;
 import com.ms.food_app.models.Order;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IOrderService;
@@ -35,7 +38,7 @@ import retrofit2.Response;
 
 public class Orders extends Fragment {
 
-    private FragmentMyOrderBinding binding;
+    private FragmentOrdersBinding binding;
     private ProgressDialog progress;
     private List<Order> orderList;
     private OrderAdapter orderAdapter;
@@ -62,7 +65,7 @@ public class Orders extends Fragment {
         if(!SharedPrefManager.getInstance(getActivity()).isLoggedIn()){
             startActivity(new Intent(getActivity(), IntroScreen.class));
         }
-        binding = FragmentMyOrderBinding.inflate(inflater, container, false);
+        binding = FragmentOrdersBinding.inflate(inflater, container, false);
         progress = LoadingUtil.setLoading(getActivity());
         binding.pendingBtnOrderList.setTextColor(getResources().getColor(R.color.blue2));
         setAdapter();
@@ -119,6 +122,14 @@ public class Orders extends Fragment {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     orderList = response.body();
+                    if(orderList.size() == 0){
+                        binding.noItem.setVisibility(View.VISIBLE);
+                        binding.listOrderRv.setVisibility(View.GONE);
+                    }
+                    else{
+                        binding.noItem.setVisibility(View.GONE);
+                        binding.listOrderRv.setVisibility(VISIBLE);
+                    }
                     orderAdapter.updateOrders(orderList);
                 }
                 progress.dismiss();

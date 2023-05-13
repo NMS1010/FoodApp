@@ -27,6 +27,7 @@ import com.ms.food_app.services.ICartService;
 import com.ms.food_app.services.ICategoryService;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -41,6 +42,7 @@ public class Cart extends AppCompatActivity {
     private CartAdapter adapter;
     private com.ms.food_app.models.Cart cart;
     private ProgressDialog progress;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,11 @@ public class Cart extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        if(!SharedPrefManager.getInstance(this).isLoggedIn()){
+            startActivity(new Intent(this, IntroScreen.class));
+            return;
+        }
+        user = SharedPrefManager.getInstance(this).getUser();
         progress = LoadingUtil.setLoading(this);
         progress.show();
         loadCart();
@@ -61,6 +68,10 @@ public class Cart extends AppCompatActivity {
             startActivity(intent);
         });
         binding.Checkout.setOnClickListener(view -> {
+            if(user.getAddresses() == null || user.getAddresses().size() == 0) {
+                ToastUtil.showToast(binding.getRoot(), "Please set your address", false);
+                return;
+            }
             Intent intent = new Intent(this, Checkout.class);
             String req = new Gson().toJson(cart);
             intent.putExtra("cart", req);

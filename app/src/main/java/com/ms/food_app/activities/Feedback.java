@@ -121,7 +121,7 @@ public class Feedback extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Review> call, Response<Review> response) {
                     if(response.isSuccessful() && response.body() != null){
-                        ToastUtil.showToast(getApplicationContext(), "Submit feedback successfully");
+                        ToastUtil.showToast(binding.getRoot(), "Submit feedback successfully", true);
                         Intent intent = new Intent(getApplicationContext(), OrderDetail.class);
                         if(rv != null)
                             intent = new Intent(getApplicationContext(), MyReview.class);

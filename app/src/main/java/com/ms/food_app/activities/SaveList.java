@@ -1,5 +1,7 @@
 package com.ms.food_app.activities;
 
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -24,6 +27,7 @@ import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +53,8 @@ public class SaveList extends AppCompatActivity {
     private void setAdapter(){
         if(products == null)
             products  =new ArrayList<>();
-        adapter = new SaveListAdapter(this, products);
+        Consumer<Integer> emptySave = (Integer i) -> binding.noItem.setVisibility(i);
+        adapter = new SaveListAdapter(this, products,emptySave);
 
         binding.favoriteMenuRv.setAdapter(adapter);
         binding.favoriteMenuRv.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -67,6 +72,12 @@ public class SaveList extends AppCompatActivity {
             public void onResponse(Call<Save> call, Response<Save> response) {
                 if(response.isSuccessful() && response.body() != null){
                     Save save = response.body();
+                    if(save.getProducts().size() == 0){
+                        binding.noItem.setVisibility(VISIBLE);
+                    }
+                    else{
+                        binding.noItem.setVisibility(View.GONE);
+                    }
                     products = save.getProducts();
                     adapter.updateSave(products);
                     progress.dismiss();

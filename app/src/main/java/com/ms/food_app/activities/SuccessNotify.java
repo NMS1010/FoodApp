@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import com.ms.food_app.R;
 import com.ms.food_app.databinding.ActivitySuccessNotifyBinding;
+import com.ms.food_app.utils.ToastUtil;
 
 public class SuccessNotify extends AppCompatActivity {
     private ActivitySuccessNotifyBinding binding;
@@ -19,6 +20,7 @@ public class SuccessNotify extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        ToastUtil.showToast(binding.getRoot(), "Success in ordering this products", true);
         setEvents();
     }
     private void setEvents(){

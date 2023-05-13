@@ -38,10 +38,12 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
     private Context context;
     private List<Product> products;
     private ProgressDialog progress;
+    private Consumer<Integer> emptySave;
 
-    public SaveListAdapter(Context context, List<Product> products) {
+    public SaveListAdapter(Context context, List<Product> products, Consumer<Integer> emptySave) {
         this.context = context;
         this.products = products;
+        this.emptySave = emptySave;
         progress = LoadingUtil.setLoading(context);
     }
     @NonNull
@@ -56,7 +58,7 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
         Product product = products.get(position);
         Glide.with(context).load(product.getImages().get(0)).into(holder.binding.imageFood);
         holder.binding.nameFood.setText(product.getName());
-        holder.binding.priceFood.setText(String.valueOf(product.getPrice()));
+        holder.binding.priceFood.setText(product.getPrice() + " VND");
         holder.binding.rateReview.setText(String.valueOf(product.getRating()));
         holder.binding.countReview.setText(product.getSold() + " orders");
         holder.binding.favoriteFood.setSelected(true);
@@ -86,6 +88,9 @@ public class SaveListAdapter extends RecyclerView.Adapter<SaveListAdapter.SaveLi
                     view.setSelected(false);
                     products.remove(position);
                     notifyItemRemoved(position);
+                    updateSave(response.body().getProducts());
+                    if(products.size() == 0)
+                        emptySave.accept(View.VISIBLE);
                     progress.dismiss();
                 }
             }

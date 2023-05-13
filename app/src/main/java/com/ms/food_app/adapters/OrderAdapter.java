@@ -51,6 +51,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             intent.putExtra("orderId", order.getId());
             context.startActivity(intent);
         });
+
     }
 
     @Override
