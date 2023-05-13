@@ -23,11 +23,13 @@ import com.ms.food_app.models.OrderItem;
 import com.ms.food_app.models.User;
 import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IOrderService;
+import com.ms.food_app.utils.Constants;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,10 +62,13 @@ public class OrderDetail extends AppCompatActivity {
             startActivity(new Intent(this, IntroScreen.class));
             return;
         }
-            if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
-                binding.statusUpdate.setVisibility(View.VISIBLE);
-            else
-                binding.statusUpdate.setVisibility(View.GONE);
+        if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))) {
+            binding.statusUpdate.setVisibility(View.VISIBLE);
+            binding.cancelBtn.setVisibility(View.GONE);
+        }
+        else
+            binding.statusUpdate.setVisibility(View.GONE);
+
         if(orderId == -1){
             Intent intent = new Intent(getApplicationContext(), Main.class);
             intent.putExtra("Check", "Order");
@@ -84,10 +89,16 @@ public class OrderDetail extends AppCompatActivity {
                     binding.status.setText(order.getStatus());
                     binding.address.setText(order.getAddress());
                     binding.totalPrice.setText(String.valueOf(order.getAmountFromUser()));
+                    if(order != null && Objects.equals(order.getStatus(), Constants.NOT_PROCESSED) &&
+                     !SharedPrefManager.getInstance(getApplicationContext()).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))){
+                        binding.cancelBtn.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        binding.cancelBtn.setVisibility(View.GONE);
+                    }
                     progressDialog.dismiss();
                 }
             }
-
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
                 Log.d("Error", t.getMessage());
@@ -96,21 +107,40 @@ public class OrderDetail extends AppCompatActivity {
         });
 
     }
+    private void backOrderListAct(){
+        Intent intent = new Intent(getApplicationContext(), Main.class);
+        if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
+            if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
+                intent = new Intent(this, AdminMain.class);
+        }
+        intent.putExtra("Check", "Order");
+        startActivity(intent);
+    }
     private void setEvents(){
         binding.back.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), Main.class);
-            if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
-                if(SharedPrefManager.getInstance(this).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
-                    intent = new Intent(this, AdminMain.class);
-                startActivity(intent);
-            }
-            intent.putExtra("Check", "Order");
-            startActivity(intent);
+            backOrderListAct();
         });
         binding.statusUpdate.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), OrderStatus.class);
             intent.putExtra("order", new Gson().toJson(order));
             startActivity(intent);
+        });
+        binding.cancelBtn.setOnClickListener(view -> {
+            progressDialog.show();
+            BaseAPIService.createService(IOrderService.class).updateStatus(orderId, Constants.CANCELLED).enqueue(new Callback<List<Order>>() {
+                @Override
+                public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                    if(response.isSuccessful() && response.body() != null){
+                        backOrderListAct();
+                    }
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(Call<List<Order>> call, Throwable t) {
+                    progressDialog.dismiss();
+                }
+            });
         });
     }
     private void setAdapter(){

@@ -17,6 +17,7 @@ import com.ms.food_app.fragments.Home;
 import com.ms.food_app.fragments.MyOrder;
 import com.ms.food_app.fragments.Profile;
 import com.ms.food_app.utils.ContextUtil;
+import com.ms.food_app.utils.ToastUtil;
 
 public class Main extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -28,6 +29,7 @@ public class Main extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         ContextUtil.context = getApplicationContext();
+        ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
         initialFragment();
         setEvents();
     }

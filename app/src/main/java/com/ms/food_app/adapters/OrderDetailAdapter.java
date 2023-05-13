@@ -17,6 +17,7 @@ import com.ms.food_app.databinding.OrderItemBinding;
 import com.ms.food_app.models.Order;
 import com.ms.food_app.models.OrderItem;
 import com.ms.food_app.utils.Constants;
+import com.ms.food_app.utils.SharedPrefManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,11 +48,14 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         Glide.with(context)
                 .load(orderItem.getProduct().getImages().get(0))
                 .into(holder.binding.orderItemImgVOrderItem);
-        if(order != null && !Objects.equals(order.getStatus(), Constants.DELIVERED) || orderItem.getRating()){
+        if(order != null && !Objects.equals(order.getStatus(), Constants.DELIVERED) || orderItem.getRating()
+        || SharedPrefManager.getInstance(context).getUser().getRoles().stream().anyMatch(x -> x.contains("ADMIN"))){
             holder.binding.reviewBtn.setVisibility(View.GONE);
+
         }else{
             holder.binding.reviewBtn.setVisibility(View.VISIBLE);
         }
+
         holder.binding.reviewBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, Feedback.class);
             intent.putExtra("orderId", order.getId());
@@ -77,6 +81,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         public OrderDetailViewHolders(@NonNull OrderDetailItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
         }
     }
 }

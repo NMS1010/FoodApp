@@ -20,6 +20,7 @@ import com.ms.food_app.fragments.Profile;
 import com.ms.food_app.fragments.admin.Orders;
 import com.ms.food_app.fragments.admin.Products;
 import com.ms.food_app.utils.ContextUtil;
+import com.ms.food_app.utils.ToastUtil;
 
 public class AdminMain extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class AdminMain extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         ContextUtil.context = getApplicationContext();
+        ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
         initialFragment();
         setEvents();
     }

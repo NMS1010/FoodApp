@@ -8,7 +8,7 @@
     android:overScrollMode="never"
     android:padding="@dimen/_24sdp"
     android:scrollbars="none"
-    tools:context=".activities.UpdateProfile">
+    tools:context=".activities.AddressDetail">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView3"

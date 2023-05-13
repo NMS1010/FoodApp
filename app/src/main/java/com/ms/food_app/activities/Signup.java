@@ -75,17 +75,17 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                 if(response.body() == null){
-                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    ToastUtil.showToast(binding.getRoot(),"Failed to register account with this information", false);
                     return;
                 }
                 AuthResponse authResponse = response.body();
                 if (authResponse.getAccessToken() != null && !authResponse.getAccessToken().equals("")) {
-                    ToastUtil.showToast(getApplicationContext(),"Registering is successfully");
+                    ToastUtil.showToast(binding.getRoot(),"Registering is successfully", true);
                     finish();
                     Intent intent = new Intent(Signup.this, Signin.class);
                     startActivity(intent);
                 }else{
-                    ToastUtil.showToast(getApplicationContext(),"Failed to register account with this information");
+                    ToastUtil.showToast(binding.getRoot(),"Failed to register account with this information, may be email has been used for another account", false);
                 }
                 progress.dismiss();
             }

@@ -80,7 +80,6 @@ public class AddressDetail extends AppCompatActivity {
                     }
                     progress.dismiss();
                 }
-
                 @Override
                 public void onFailure(Call<List<Address>> call, Throwable t) {
                     Log.d("Error", t.getMessage());

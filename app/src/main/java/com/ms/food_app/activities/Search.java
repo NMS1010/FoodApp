@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -57,7 +58,7 @@ public class Search extends AppCompatActivity {
         binding.btnSearch.setOnClickListener(view -> {
             String txt = binding.edtSearch.getText().toString();
             if(txt.trim().equals("")){
-                ToastUtil.showToast(getApplicationContext(), "Please type anything....");
+                ToastUtil.showToast(binding.getRoot(), "Please type anything....", false);
             }else{
                 progress.show();
                 BaseAPIService.createService(IProductService.class).getAllProducts(txt).enqueue(new Callback<ProductResponse>() {
@@ -65,6 +66,10 @@ public class Search extends AppCompatActivity {
                     public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
                         if(response.isSuccessful() && response.body() != null){
                             products = response.body().getProducts();
+                            if(products.size() == 0)
+                                binding.noItem.setVisibility(View.VISIBLE);
+                            else
+                                binding.noItem.setVisibility(View.GONE);
                             adapter.updateProducts(products);
                         }
                         progress.dismiss();

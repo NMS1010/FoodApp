@@ -59,6 +59,8 @@ public class ProductStatus extends AppCompatActivity {
             binding.count.setText(String.valueOf(count));
         });
         binding.updateProduct.setOnClickListener(view -> {
+            if(!isValidated())
+                return;
             progress.show();
             UpdateProductRequest updateProductRequest = new UpdateProductRequest();
             updateProductRequest.setId(product.getId());
@@ -72,7 +74,7 @@ public class ProductStatus extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Product> call, Response<Product> response) {
                     if(response.isSuccessful() && response.body() != null){
-                        ToastUtil.showToast(getApplicationContext(), "Update successfully");
+                        ToastUtil.showToast(binding.getRoot(), "Update successfully", true);
                     }
                     progress.dismiss();
                 }
@@ -103,6 +105,21 @@ public class ProductStatus extends AppCompatActivity {
             }
         });
     }
+    private Boolean isValidated() {
+        if (binding.priceProduct.getText().toString().trim().isEmpty()) {
+            binding.priceProduct.setError("Enter price");
+            return false;
+        }
+        if (binding.promotionalPriceProduct.getText().toString().trim().isEmpty()) {
+            binding.promotionalPriceProduct.setError("Enter promotional price");
+            return false;
+        }
+        if (binding.count.getText().toString().trim().isEmpty()) {
+            binding.count.setError("Enter quantity");
+            return false;
+        }
+        return true;
+    }
     private void loadProduct(){
         Intent intent = getIntent();
         String p = intent.getStringExtra("product");
@@ -114,6 +131,7 @@ public class ProductStatus extends AppCompatActivity {
             binding.count.setText(String.valueOf(product.getQuantity()));
             binding.priceProduct.setText(String.valueOf(product.getPrice()));
             binding.promotionalPriceProduct.setText(String.valueOf(product.getPromotionalPrice()));
+            binding.nameProduct.setText(product.getName());
         }
     }
 }

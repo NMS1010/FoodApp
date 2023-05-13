@@ -264,7 +264,7 @@ public class UpdateProfile extends AppCompatActivity implements DatePickerDialog
                     intent.putExtra("Check", "Profile");
                     startActivity(intent);
                 }else{
-                    ToastUtil.showToast(getApplicationContext(), "Failed to update profile");
+                    ToastUtil.showToast(binding.getRoot(), "Failed to update profile", false);
                 }
                 progress.dismiss();
             }
@@ -309,7 +309,7 @@ public class UpdateProfile extends AppCompatActivity implements DatePickerDialog
         mCalendar.set(Calendar.MONTH, i1);
         mCalendar.set(Calendar.DAY_OF_MONTH, i2);
         lastSelectedYear = mCalendar.get(Calendar.YEAR);
-        lastSelectedMonth = mCalendar.get(Calendar.MONTH);
+        lastSelectedMonth = mCalendar.get(Calendar.MONTH) + 1;
         lastSelectedDayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
         String selectedDate = lastSelectedYear + "-" + lastSelectedMonth + "-" + lastSelectedDayOfMonth;
         binding.birthdayTvUpdateProfile.setText(selectedDate);

@@ -55,15 +55,15 @@ public class ProductDetail extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        Intent intent = getIntent();
         progress = LoadingUtil.setLoading(this);
+        Intent intent = getIntent();
         String param = intent.getStringExtra("product");
         if(param != null && !param.isEmpty()){
             product = new Gson().fromJson(param, Product.class);
             loadProduct();
             setEvents();
         }else{
-            ToastUtil.showToast(this,"Cannot load product");
+            ToastUtil.showToast(binding.getRoot(),"Cannot load product", false);
             finish();
         }
     }
@@ -75,9 +75,6 @@ public class ProductDetail extends AppCompatActivity {
             return;
         }
 
-        images = new ArrayList<>();
-        product.getImages().forEach(x -> images.add(x));
-        sliderAdapter = new SliderAdapter(this, images);
         progress.show();
         User user = SharedPrefManager.getInstance(this).getUser();
         BaseAPIService.createService(ISaveService.class).getSaveProductByUserId(user.getId()).enqueue(new Callback<Save>() {
@@ -110,6 +107,9 @@ public class ProductDetail extends AppCompatActivity {
             binding.notAvailable.setVisibility(View.GONE);
             binding.addToCart.setVisibility(View.VISIBLE);
         }
+        images = new ArrayList<>();
+        product.getImages().forEach(x -> images.add(x));
+        sliderAdapter = new SliderAdapter(this, images);
         binding.nameDetail.setText(product.getName());
         binding.descripDetail.loadDataWithBaseURL(null, product.getDescription(), "text/html", "UTF-8", null);
         binding.priceDetail.setText(product.getPrice() + " VND");
@@ -149,10 +149,10 @@ public class ProductDetail extends AppCompatActivity {
                 public void onResponse(Call<Save> call, Response<Save> response) {
                     if(response.isSuccessful() && response.body() != null){
                         if(!binding.fav.isSelected())
-                            ToastUtil.showToast(getApplicationContext(), "Succeed in adding product to your save list");
+                            ToastUtil.showToast(binding.getRoot(), "Succeed in adding product to your save list", true);
                         binding.fav.setSelected(true);
                     }else{
-                        ToastUtil.showToast(getApplicationContext(), "Failed to add product to your save list");
+                        ToastUtil.showToast(binding.getRoot(), "Failed to add product to your save list", false);
                     }
                     progress.dismiss();
                 }
@@ -180,8 +180,10 @@ public class ProductDetail extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<com.ms.food_app.models.Cart> call, Response<com.ms.food_app.models.Cart> response) {
                     if(response.isSuccessful() && response.body() != null){
-                        ToastUtil.showToast(getApplicationContext(), "Add product to your cart successfully");
+                        ToastUtil.showToast(binding.getRoot(), "Add product to your cart successfully", true);
                         progress.dismiss();
+                    }else{
+                        ToastUtil.showToast(binding.getRoot(), "Failed to add",false);
                     }
                 }
 

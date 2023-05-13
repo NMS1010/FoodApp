@@ -121,7 +121,7 @@
 
                     <TextView
                         android:id="@+id/name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="@+id/textView10"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -139,7 +139,9 @@
 
                     <TextView
                         android:id="@+id/address"
-                        android:layout_width="wrap_content"
+                        android:singleLine="false"
+                        android:maxEms="10"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="@+id/textView13"
                         app:layout_constraintEnd_toEndOf="parent"
