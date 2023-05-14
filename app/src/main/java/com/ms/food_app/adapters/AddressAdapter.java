@@ -1,6 +1,7 @@
 package com.ms.food_app.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.ms.food_app.R;
 import com.ms.food_app.activities.AddressDetail;
 import com.ms.food_app.databinding.AddressItemBinding;
 import com.ms.food_app.models.Address;
@@ -21,6 +23,7 @@ import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
 import com.ms.food_app.utils.ContextUtil;
 import com.ms.food_app.utils.LoadingUtil;
+import com.ms.food_app.utils.ToastUtil;
 
 import java.util.List;
 
@@ -56,7 +59,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         holder.binding.addressItemWDPTvAddress.setText(txt);
         holder.binding.addressItemDeleteBtnAddress.setOnClickListener(view -> {
             if(addressItem.getStatus()){
-                showToast("Cannot remove default address");
+                ToastUtil.showToast(((Activity) context).findViewById(R.id.listAddress),"Cannot remove default address", false);
                 return;
             }
             progress.show();
@@ -66,6 +69,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
                     if(response.isSuccessful() && response.body() != null){
                         addresses.remove(holder.getAdapterPosition());
                         notifyItemRemoved(holder.getAdapterPosition());
+                        ToastUtil.showToast(((Activity) context).findViewById(R.id.listAddress),"Remove successfully", true);
                     }
                     progress.dismiss();
                 }

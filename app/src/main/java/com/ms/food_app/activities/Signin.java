@@ -228,7 +228,6 @@ public class Signin extends AppCompatActivity {
                 SharedPrefManager.getInstance(getApplicationContext()).saveUser(currentUser);
                 if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()) {
                     ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
-                    finish();
                     Intent intent = new Intent(Signin.this, Main.class);
                     if(currentUser.getRoles().stream().anyMatch(x -> x.contains("ADMIN")))
                         intent = new Intent(Signin.this, AdminMain.class);

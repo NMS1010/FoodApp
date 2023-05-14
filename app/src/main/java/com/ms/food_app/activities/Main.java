@@ -29,7 +29,10 @@ public class Main extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         ContextUtil.context = getApplicationContext();
-        ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
+        String param = getIntent().getStringExtra("loginSuccess");
+        if(param != null && param.equals("true")){
+            ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
+        }
         initialFragment();
         setEvents();
     }

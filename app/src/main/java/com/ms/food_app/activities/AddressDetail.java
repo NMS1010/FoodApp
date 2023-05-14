@@ -20,6 +20,7 @@ import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 import java.util.List;
 import java.util.Objects;
@@ -71,12 +72,15 @@ public class AddressDetail extends AppCompatActivity {
             BaseAPIService.createService(IUserService.class).uploadAddresses((JsonObject) parser.parse(request)).enqueue(new Callback<List<Address>>() {
                 @Override
                 public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
+                    Intent intent = new Intent(getApplicationContext(), AddressList.class);
                     if(response.isSuccessful() && response.body() != null){
                         User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
                         user.setAddresses(response.body());
                         SharedPrefManager.getInstance(getApplicationContext()).saveUser(user);
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), AddressList.class));
+                        intent.putExtra("success", "true");
+                        startActivity(intent);
+                    }else{
+                        ToastUtil.showToast(binding.getRoot(), "Fail to create/update", false);
                     }
                     progress.dismiss();
                 }

@@ -50,6 +50,7 @@ public class Profile extends Fragment {
             startActivity(new Intent(getActivity(), Signin.class));
         }
         binding = FragmentProfileBinding.inflate(inflater, container, false);
+        binding.changePasswordLayout.setVisibility(View.GONE);
         loadProfile();
         setEvents();
         return binding.getRoot();
