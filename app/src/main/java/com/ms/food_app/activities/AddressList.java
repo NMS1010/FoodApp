@@ -19,6 +19,7 @@ import com.ms.food_app.services.BaseAPIService;
 import com.ms.food_app.services.IUserService;
 import com.ms.food_app.utils.LoadingUtil;
 import com.ms.food_app.utils.SharedPrefManager;
+import com.ms.food_app.utils.ToastUtil;
 
 
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class AddressList extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         progress = LoadingUtil.setLoading(this);
+        String param = getIntent().getStringExtra("success");
+        if(param != null && param.equals("true")){
+            ToastUtil.showToast(binding.getRoot(), "Successfully", true);
+        }
         setAdapter();
         setEvents();
         loadAddress();

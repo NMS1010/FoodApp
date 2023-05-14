@@ -33,7 +33,6 @@ public class AdminMain extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         ContextUtil.context = getApplicationContext();
-        ToastUtil.showToast(binding.getRoot(),"Logging successfully", true);
         initialFragment();
         setEvents();
     }
@@ -41,7 +40,6 @@ public class AdminMain extends AppCompatActivity {
         binding.bottomNavigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     private void initialFragment(){
-
         Intent intent = getIntent();
         String s = intent.getStringExtra("Check");
         if(s == null) {
